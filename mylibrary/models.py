@@ -1,9 +1,6 @@
 from django.db import models
 
 # Create your models here.
-
-
-from django.db import models
 from django.contrib import admin
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
@@ -19,22 +16,25 @@ class Review(models.Model):
     edited=models.BooleanField(default=False)
     reviewAuthorFK=models.ForeignKey(User, on_delete=models.CASCADE, null=False)
 
-class Group(models.Model):
-    numOfMembers=models.IntegerField(default=0)
-    groupID=models.CharField(max_length=50)
-    groupMember=models.ForeignKey(User, on_delete=models.CASCADE)
+class Book(models.Model):
+    ISBN=models.IntegerField(unique=True)
+    author=models.CharField(max_length=50)
+    #uploadedBy=models.ForeignKey(User, on_delete=models.CASCADE)
+    coverPhoto=models.ImageField()
+    categories = models.ManyToManyField(Category)
+    title=models.CharField(max_length=500)
+    slug=models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug=slugify(self.title)
+        super(Book,self).save(*args, **kwargs)
 
 class User(models.Model):
     username=models.CharField(max_length=50, unique=True)
     email=models.EmailField()
     profilePic=models.ImageField()
     password=models.CharField(max_length=20)
-
-class Book(models.Model):
-    ISBN=models.IntegerField(unique=True)
-    author=models.CharField()
-    uploadedBy=models.ForeignKey(User, on_delete=models.CASCADE)
-    coverPhoto=models.ImageField()
+    books = models.ManyToManyField(Book)
 
 class Goal(models.Model):
     goalAuthor=models.ForeignKey(User, on_delete=models.CASCADE, null=False)
@@ -44,4 +44,4 @@ class Goal(models.Model):
 
 
 class Admin(models.Model):
-    adminID=models.CharField(50, unique=True) 
+    adminID=models.CharField(max_length=50, unique=True) 
