@@ -1,9 +1,16 @@
+from django.http import HttpResponse
+import django
+from django.shortcuts import render
+from mylibrary.forms import BookForm
+from django.shortcuts import redirect
+from django.contrib.auth.models import User
+
+# Create your views here.
+
 import os 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                       'group_work.settings')
 
-
-import django
 
 django.setup() 
 

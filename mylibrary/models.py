@@ -16,10 +16,16 @@ class Review(models.Model):
     edited=models.BooleanField(default=False)
     reviewAuthorFK=models.ForeignKey(User, on_delete=models.CASCADE, null=False)
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profileLink = models.URLField(blank=True)
+    profilePic=models.ImageField()
+
+
 class Book(models.Model):
     ISBN=models.IntegerField(unique=True)
     author=models.CharField(max_length=50)
-    #uploadedBy=models.ForeignKey(User, on_delete=models.CASCADE)
+    uploadedBy=models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     coverPhoto=models.ImageField()
     categories = models.ManyToManyField(Category)
     title=models.CharField(max_length=500)
@@ -29,12 +35,6 @@ class Book(models.Model):
         self.slug=slugify(self.title)
         super(Book,self).save(*args, **kwargs)
 
-class User(models.Model):
-    username=models.CharField(max_length=50, unique=True)
-    email=models.EmailField()
-    profilePic=models.ImageField()
-    password=models.CharField(max_length=20)
-    books = models.ManyToManyField(Book)
 
 class Goal(models.Model):
     goalAuthor=models.ForeignKey(User, on_delete=models.CASCADE, null=False)

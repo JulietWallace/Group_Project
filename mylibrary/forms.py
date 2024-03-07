@@ -14,3 +14,6 @@ class BookForm(forms.ModelForm):
         model = Book
 
         fields=('title', 'author','ISBN',)
+
+    def set_uploaded_by(self, user):
+        self.uploadedBy.id = user

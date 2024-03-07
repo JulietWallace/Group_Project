@@ -7,7 +7,7 @@ from django.shortcuts import redirect
 from django.http import HttpResponse 
 
 def index(request):
-    return HttpResponse("Welcome to MyLibrary")
+    return render(request, 'mylibrary/index.html', context={})
 
 
 def add_book(request):
@@ -17,6 +17,7 @@ def add_book(request):
         form =  BookForm(request.POST)
         if form.is_valid():
             form.save(commit=True)
+            form.set_uploaded_by(request.user)
             return redirect('/mylibrary/')
         else:
             print(form.errors)
