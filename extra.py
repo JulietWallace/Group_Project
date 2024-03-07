@@ -1,15 +1,3 @@
-import django
-
-# Create your views here.
-
-import os 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE',"group_work.settings")
-
-
-django.setup() 
-
-from mylibrary.models import Book, Category, Review, User, Goal, Admin
-
 def populate():
     book_dict=[{"title":"Pride and Prejudice", "author": "Jane Austen", "ISBN": 9780140430721},
                {"title":"Crime and Punishment", "author": "Fyodor Dostoyevsky", "ISBN": 648103837163},
