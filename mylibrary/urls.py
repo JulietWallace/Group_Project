@@ -8,4 +8,5 @@ app_name = 'mylibrary'
 urlpatterns = [
     path('', views.index, name='index'),
     path('add_book/', views.add_book, name='add_book'),
+    path('books/<slug:book_name_slug>/', views.show_book, name='show_book'),
 ]
