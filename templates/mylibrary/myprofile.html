@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+
+{% extends 'mylibrary/base.html' %}
+
+{% load staticfiles %}
+
+{% block title_block %}
+Hello 
+{% endblock %}
+
+{% block body_block %}
+Links:
+<li><a href="{% url 'mylibrary:mygoals' %}">Add Book</a></li>
+{% endblock %}

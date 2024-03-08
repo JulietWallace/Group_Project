@@ -9,6 +9,13 @@ from django.http import HttpResponse
 def index(request):
     return render(request, 'mylibrary/index.html', context={})
 
+def myprofile(request):
+    return render(request, 'mylibrary/myprofile.html', context={})
+
+
+def mygoals(request):
+    return render(request, 'mylibrary/mygoals.html', context={})
+
 
 def add_book(request):
     form = BookForm()
@@ -17,7 +24,7 @@ def add_book(request):
         form =  BookForm(request.POST)
         if form.is_valid():
             form.save(commit=True)
-            #form.set_uploaded_by(request.user)
+            form.set_uploaded_by(request.user)
             return redirect('/mylibrary/')
         else:
             print(form.errors)

@@ -12,8 +12,18 @@ class BookForm(forms.ModelForm):
     
     class Meta:
         model = Book
-
-        fields=('title', 'author','ISBN',)
+        fields=('title', 'author','ISBN','uploadedBy')
 
     def set_uploaded_by(self, user):
-        self.model.uploadedBy.id = user
+        self.object.uploadedBy = user
+
+class GoalForm(forms.ModelForm):
+    title = forms.CharField(max_length=128, help_text="Enter the title of the book")
+    author = forms.CharField(max_length=50, help_text="Enter the author of the book")
+    ISBN = forms.IntegerField(help_text="Enter the ISBN of the book")
+    slug = forms.CharField(widget=forms.HiddenInput(), required=False)
+    
+    class Meta:
+        model = Book
+
+        fields=('title', 'author','ISBN',)
