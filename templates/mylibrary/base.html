@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-{%load staticfiles%}
+{% load staticfiles %}
 
 <html>
 <head lang="en">
@@ -11,6 +11,7 @@
     {% block body_block %}
     {% endblock %}
     </div>
-    <hr />
+    <script src="{% static "js/jquery-3.3.1.min.js" %}" crossorigin="anonymous"></script>
+    <script src="{% static "js/mylibrary-jquery.js" %}" crossorigin="anonymous"></script>
     </body> 
 </html>
