@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+
+{% extends 'mylibrary/base.html' %}
+
+{% block title_block %}
+MyLibrary
+{% endblock %}
+
+{% block body_block %}
+Links:
+<li><a href="{% url 'mylibrary:add_book' %}">Add Book</a></li>
+<li><a href="{% url 'mylibrary:about' %}">About</a></li>
+<li><a href="{% url 'mylibrary:myprofile' %}">MyProfile</a></li>
+{% endblock %}

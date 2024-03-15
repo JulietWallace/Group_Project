@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+<html>
+<head lang="en">
+<meta charset="UTF-8" />
+<title>MyLibrary - {% block title_block %}MyLibrary{% endblock %}</title>
+<body>
+    <div>
+    {% block body_block %}
+    {% endblock %}
+    </div>
+    <script src="{% static "js/jquery-3.3.1.min.js" %}" crossorigin="anonymous"></script>
+    <script src="{% static "js/mylibrary-jquery.js" %}" crossorigin="anonymous"></script>
+    </body> 
+</html>

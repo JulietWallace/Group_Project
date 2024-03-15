@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+{% extends 'mylibrary/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+About MyLibrary
+{% endblock %}
+{% block body_block %}
+<div><strong>{{ "This web page has been put together by Juliet Wallace" }}</strong><br /> </div>
+<button class="btn btn-primary"
+onclick="alert('You clicked the button using inline JavaScript.');">
+Click me - I run on vanilla JavaScript! </button>
+<button class="btn btn-primary" id="about-btn"> Click me - I'm using JQuery!
+</button>
+{% endblock %}
