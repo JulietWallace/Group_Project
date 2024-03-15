@@ -41,6 +41,11 @@ class Goal(models.Model):
     dateSet=models.DateTimeField()
     achieved=models.BooleanField()
     goalID=models.CharField(max_length=50,unique=True)
+    numPages=models.IntegerField(null=True)
+    dateDay=models.IntegerField(null=True)
+    dateMonth=models.IntegerField(null=True)
+    dateYear=models.IntegerField(null=True)
+    slug=models.SlugField(unique=True)
 
 
 class Admin(models.Model):

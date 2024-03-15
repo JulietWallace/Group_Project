@@ -9,4 +9,9 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('add_book/', views.add_book, name='add_book'),
     path('books/<slug:book_name_slug>/', views.show_book, name='show_book'),
+    path('about/', views.about, name='about'),
+    path('myprofile/', views.myprofile, name='myprofile'),
+    path('mygoals/', views.mygoals, name='mygoals'),
+    path('set_goal/', views.mygoals, name='set_goal'),
+
 ]

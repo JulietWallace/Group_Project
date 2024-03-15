@@ -22,17 +22,16 @@ class BookForm(forms.ModelForm):
         return self.book_dict
 
 class GoalForm(forms.ModelForm):
-    title = forms.CharField(max_length=128, help_text="Enter the title of the book")
-    author = forms.CharField(max_length=50, help_text="Enter the author of the book")
-    ISBN = forms.IntegerField(help_text="Enter the ISBN of the book")
+    ISBN = forms.IntegerField(help_text="Enter the ISBN of the book this goal refers to")
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
-    goal_dict = {"goalAuthor": title, "dateSet": author,"goalID":ISBN, "achieved":None}
+    numPages=forms.IntegerField(help_text="How many pages do you want to read?")
+    dateDay=forms.IntegerField(help_text="When do you want to achieve this by? Day: ")
+    dateMonth=forms.IntegerField(help_text="Month: ")
+    dateYear=forms.IntegerField(help_text="Year: ")
+
     
     class Meta:
         model = Goal
-        fields=('goalAuthor', 'dateSet','goalID','achieved')
-
-    def set_goalAuthor(self, user):
-        self.goal_dict["goalAuthor"]=user
+        fields=('goalAuthor', 'dateSet','goalID','achieved', 'slug', 'dateDay', 'dateMonth', 'dateYear')
 
 
