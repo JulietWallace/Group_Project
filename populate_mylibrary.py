@@ -11,10 +11,10 @@ django.setup()
 from mylibrary.models import Book, Category, Review, User, Goal, Admin
 
 def populate():
-    book_dict=[{"title":"Pride and Prejudice", "author": "Jane Austen", "ISBN": 9780140430721, "uploadedBy":"juliet"},
-               {"title":"Crime and Punishment", "author": "Fyodor Dostoyevsky", "ISBN": 648103837163, "uploadedBy":"juliet"},
-               {"title":"War and Peace", "author": "Leo Tolstoy", "ISBN": 4567891234, "uploadedBy":"juliet"},
-               {"title":"1984", "author": "George Orwell", "ISBN": 435678129391, "uploadedBy":"juliet"}]
+    book_dict=[{"title":"Pride and Prejudice", "author": "Jane Austen", "ISBN": 9780140430721, "uploadedBy":User.objects.get(username="juliet")},
+               {"title":"Crime and Punishment", "author": "Fyodor Dostoyevsky", "ISBN": 648103837163, "uploadedBy":User.objects.get(username="juliet")},
+               {"title":"War and Peace", "author": "Leo Tolstoy", "ISBN": 4567891234, "uploadedBy":User.objects.get(username="juliet")},
+               {"title":"1984", "author": "George Orwell", "ISBN": 435678129391, "uploadedBy":User.objects.get(username="juliet")}]
     for b in book_dict:
         add_book(b["title"], b["ISBN"], b["author"],b["uploadedBy"])
     for book in Book.objects.all():

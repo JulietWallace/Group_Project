@@ -9,13 +9,6 @@ class Category(models.Model):
     categoryID=models.CharField(max_length=20, unique=True)
     numOfBooks=models.IntegerField(default=0)
 
-
-class Review(models.Model):
-    reviewID=models.CharField(max_length=50, unique=True)
-    dateWritten=models.DateField()
-    edited=models.BooleanField(default=False)
-    reviewAuthorFK=models.ForeignKey(User, on_delete=models.CASCADE, null=False)
-
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profileLink = models.URLField(blank=True)
@@ -35,7 +28,6 @@ class Book(models.Model):
         self.slug=slugify(self.title)
         super(Book,self).save(*args, **kwargs)
 
-
 class Goal(models.Model):
     goalAuthor=models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     dateSet=models.DateTimeField()
@@ -50,3 +42,13 @@ class Goal(models.Model):
 
 class Admin(models.Model):
     adminID=models.CharField(max_length=50, unique=True) 
+
+class Review(models.Model):
+    reviewID=models.CharField(max_length=50, unique=True)
+    dateWritten=models.DateField()
+    edited=models.BooleanField(default=False)
+    reviewAuthorFK=models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    reviewBookFK=models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
+
+
+
