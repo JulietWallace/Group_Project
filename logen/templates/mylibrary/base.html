@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+<link rel="stylesheet" href="{% static 'idk.css' %}">
+
+<html>
+<head lang="en">
+<meta charset="UTF-8" />
+<title>MyLibrary - {% block title_block %}MyLibrary{% endblock %}</title>
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<link rel="stylesheet" href="{% static 'css/idk.css' %}">
+<body>
+
+<div class="container">
+    <ul class="nav bg-info">
+        <li class="nav-item">
+            <a class="nav-link link-light" href="{% url 'mylibrary:index' %}">HOME</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link link-light" href="{% url 'mylibrary:about' %}">About</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link link-light" href="{% url 'mylibrary:explorecategory' %}">Explore Categories</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link link-light" href="{% url 'mylibrary:logout' %}">Logout</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link link-light" href="{% url 'mylibrary:myreviews' %}">MyReviews</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link link-light" href="{% url 'mylibrary:myprofile' %}">MyProfile</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link link-light" href="{% url 'mylibrary:register' %}">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link link-light" href="{% url 'mylibrary:login' %}">Login</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+            <a class="nav-link link-light" href="{% url 'mylibrary:explorecategory' %}">Explore Categories</a>
+        </li>
+    </ul>
+    </div>
+
+    <div>
+    {% block body_block %}
+    {% endblock %}
+    </div>
+    <script src="{% static "js/jquery-3.3.1.min.js" %}" crossorigin="anonymous"></script>
+    <script src="{% static "js/mylibrary-jquery.js" %}" crossorigin="anonymous"></script>
+    </body> 
+</html>

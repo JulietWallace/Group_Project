@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% extends 'mylibrary/base.html' %}
+{% block body_block %}
+<body>
+<h1>Add a review for {{ book.title}}</h1>
+<form method ="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add review </button>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star"></span>
+    <span class="fa fa-star"></span>
+</form>
+</body>
+<div class = "stars">
+    <span class = "star" data-value="1">&#9733;</span>
+    <input type = "hidden" id="star_rating" name = "star_rating" value="">
+    </div>
+
+
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+$(document).ready(function()){
+    $('.star').click(function()){
+        var stars = $(this).data('value');
+        $('#star_rating').val(stars);
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+{% extends 'mylibrary/base.html' %}
+
+{% load staticfiles %}
+
+{% block title_block %}
+These are your goals:
+{% endblock %}
+{% if goals %}
+{% for goal in goals %}
+<li><a href="{{ goal.slug }}">{{ goal.ISBN }}</a></li> {% endfor %}
+
+{% block body_block %}
+Links:
+<li><a href="{% url 'mylibrary:add_book' %}">Add Book</a></li>
+{% endblock %}

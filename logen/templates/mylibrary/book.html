@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% extends 'mylibrary/base.html' %}
+{% block body_block %}
+<html>
+
+    <head>
+        <title>Book</title>
+    </head>
+
+    <body>
+        <div>
+            <div class="container mt-6">
+                <div class="col">
+                  <div class="col-sm-4">
+                    {% if book %}
+                    <h1>{{ book }} by {{ book.author }}</h1></br>
+                    <h5>uploaded by {{ book.uploadedBy }}</h5>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+    </div>
+
+    <div>
+            <div class="container mt-5">
+                <div class="col">
+                  <div class="col-sm-4">
+                    <h1>{{ book.coverPhoto }}</h1>
+                    <h1>{{ book.uploadedby }}</h1>
+                    <h1>{{ book.bookCategory }}</h1>
+                  </div>
+                </div>
+              </div>
+            {% for review in reviews %}
+            <div class="container mt-5">
+                <div class="col">
+                  <div class="col-sm-4">
+                    <h3>{{review.reviewAuthorFK}} {{review.dateWritten}}</h3>
+                    <p>{{ review.message }}</p>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+            <li><a href="/mylibrary/book/{{ book.slug }}/write_review">Write review</a></li>
+    </div>
+    </body>
+
+</html>
+{% endblock %}
