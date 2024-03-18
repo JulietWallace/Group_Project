@@ -20,5 +20,9 @@ from django.contrib import admin
 urlpatterns = [
     path('', views.index, name='index'),
     path('mylibrary/', include('mylibrary.urls')),
+    path('category/<slug:category_name_slug>/', views.show_category, name = "show_category"),
+    path('mylibrary/book/<slug:book_name_slug>/', views.show_book, name='show_book'),
+    path('myreviews/', views.myreviews, name='myreviews'),
+    path('register/', views.register, name='register'),
     path("admin/", admin.site.urls),
 ]
