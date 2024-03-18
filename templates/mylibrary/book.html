@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% extends 'mylibrary/base.html' %}
 {% block body_block %}
+<<<<<<< HEAD
 <html>
 
     <head>
@@ -46,4 +47,12 @@
     </body>
 
 </html>
+=======
+{% if book %}
+<h1>{{ book.title }}</h1> 
+<h1>{{ book.ISBN }}</h1> 
+<h1>{{ book.author }}</h1> 
+<h1>{{ book.uploadedBy }}</h1> 
+{% endif %}
+>>>>>>> 60649341eddbe63f2cbea2418a8bc12987723101
 {% endblock %}

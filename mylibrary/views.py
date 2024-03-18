@@ -1,5 +1,9 @@
 from django.shortcuts import render
+<<<<<<< HEAD
 from mylibrary.forms import BookForm, UserProfileForm, UserForm, ReviewForm
+=======
+from mylibrary.forms import BookForm, GoalForm
+>>>>>>> 60649341eddbe63f2cbea2418a8bc12987723101
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -21,7 +25,8 @@ def index(request):
     return render(request, 'mylibrary/index.html', context={})
 
 def myprofile(request):
-    user = User.objects.get(username=request.user.username)
+    print(request.user)
+    user = User.objects.get(username=request.user)
     context_dict={"user":user}
     return render(request, 'mylibrary/myprofile.html', context_dict)
 
@@ -111,27 +116,29 @@ def register(request):
     return render(request, "mylibrary/register.html", context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
 
-def set_goal(request):
+def setgoal(request):
     form = GoalForm()
 
     if request.method == 'POST':
-        goal =  BookForm(request.POST)
+        goal =  GoalForm(request.POST)
         if form.is_valid():
+            print("valid")
             goal=form.save(commit=False)
             goal.goalAuthor=request.user
             goal.dateSet=datetime.datetime.now()
             goal.save()
-            return redirect(reverse('mylibrary:mygoals'))
+            return redirect(reverse('mylibrary:show_goal', kwargs={'goal_slug': goal.slug}))
         else:
+            print("form errors")
             print(form.errors)
     
-    return render(request, 'mylibrary/mygoals.html', {'form': form})
+    return render(request, 'mylibrary/setgoal.html', {'form': form})
 
 def mygoals(request):
     context_dict={}
     goals = Goal.objects.filter(goalAuthor=request.user)
     context_dict["goals"] = goals
-    return render(request, "mygoals.html", context=context_dict)
+    return render(request, "mylibrary/mygoals.html", context=context_dict)
 
 def myreviews(request):
     context_dict={}
@@ -181,7 +188,7 @@ def add_book(request):
             book=form.save(commit=False)
             book.uploadedBy=request.user
             book.save()
-            show_book(request, book.slug)
+            #show_book(request, book.slug)
             return redirect(reverse('mylibrary:show_book', kwargs={'book_name_slug': book.slug}))
         else:
             print(form.errors)
@@ -191,9 +198,20 @@ def add_book(request):
 def about(request):
     return render(request, 'mylibrary/about.html', context={})
 
+<<<<<<< HEAD
 @login_required
 def user_logout(request):
     logout(request)
     return redirect(reverse('mylibrary:index'))
+=======
+def show_goal(request, goal_slug):
+    context_dict={}
+    try:
+        goal=Goal.objects.get(slug=goal_slug)
+        context_dict["goal"]=goal
+    except Goal.DoesNotExist:
+        context_dict["goal"]=None
+    return render(request, "mylibrary/goal.html", context=context_dict)
+>>>>>>> 60649341eddbe63f2cbea2418a8bc12987723101
 
 
