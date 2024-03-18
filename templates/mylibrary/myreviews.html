@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+{% extends 'mylibrary/base.html' %}
+
+{% load staticfiles %}
+
+{% block title_block %}
+These are your goals:
+{% endblock %}
+{% if reviews %}
+{% for review in reviews %}
+<h1>{{ review.message }}</h1>
+{% endfor %}
+{% endif %}
+
+{% block body_block %}
+Links:
+<li><a href="{% url 'mylibrary:add_book' %}">Add Book</a></li>
+{% if reviews %}
+{% for review in reviews %}
+<div class="container mt-5">
+    <div class="col">
+      <div class="col-sm-4">
+        <h3>{{ review.reviewBookFK }}</h3>
+        <p>{{ review.message }}</p>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+{% endif %}
+{% endblock %}

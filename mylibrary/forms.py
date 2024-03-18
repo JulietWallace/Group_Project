@@ -1,5 +1,5 @@
 from django import forms
-from mylibrary.models import Book, Category, Review, User, Goal, Admin
+from mylibrary.models import Book, Category, Review, UserProfile, Goal, Admin
 from django.contrib.auth.models import User 
 
 
@@ -34,4 +34,15 @@ class GoalForm(forms.ModelForm):
         model = Goal
         fields=('goalAuthor', 'dateSet','goalID','achieved', 'slug', 'dateDay', 'dateMonth', 'dateYear')
 
+class UserForm(forms.ModelForm):
 
+    password = forms.CharField(widget=forms.PasswordInput())
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password',)
+
+class UserProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = UserProfile
+        fields = ('profilePic',)
