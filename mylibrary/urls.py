@@ -12,6 +12,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('myprofile/', views.myprofile, name='myprofile'),
     path('mygoals/', views.mygoals, name='mygoals'),
-    path('set_goal/', views.mygoals, name='set_goal'),
+    path('setgoal/', views.setgoal, name='setgoal'),
+    path('mygoals/<slug:goal_slug>/', views.show_goal, name='show_goal'),
 
 ]

@@ -29,15 +29,20 @@ class Book(models.Model):
         super(Book,self).save(*args, **kwargs)
 
 class Goal(models.Model):
+    goalName=models.CharField(max_length=500,null=True, unique=True)
     goalAuthor=models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     dateSet=models.DateTimeField()
     achieved=models.BooleanField()
-    goalID=models.CharField(max_length=50,unique=True)
+    ISBN=models.IntegerField()
     numPages=models.IntegerField(null=True)
     dateDay=models.IntegerField(null=True)
     dateMonth=models.IntegerField(null=True)
     dateYear=models.IntegerField(null=True)
     slug=models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug=slugify(self.goalName)
+        super(Goal,self).save(*args, **kwargs)
 
 
 class Admin(models.Model):
