@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+{% extends 'mylibrary/base.html' %}
+
+{% load staticfiles %}
+
+{% block title_block %}
+Hello 
+{% endblock %}
+
+{% block body_block %}
+<div>
+Hello {{ request.user.username }}
+You have been a member since {{ request.user.date_joined }}
+Your current goals are:
+
+</div>
+Links:
+<button class="btn btn-primary" id="about-btn"> Click me - I'm using JQuery!
+</button>
+<li><a href="{% url 'mylibrary:mygoals' %}">MyGoals</a></li>
+{% endblock %}
