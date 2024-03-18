@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+{% extends 'mylibrary/base.html' %} 
+
+{% block title_block %} 
+{% if goal %}
+        {{ goal.goalName }}
+    {% else %}
+        Error finding goal.
+    {% endif %}
+{% endblock %}
+
+{% block body_block %}
+{% if goal %}
+<h1>{{ goal.goalName }}</h1> 
+<h1>{{ goal.ISBN }}</h1> 
+{% endif %}
+{% endblock %}

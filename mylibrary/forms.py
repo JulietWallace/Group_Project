@@ -28,10 +28,11 @@ class GoalForm(forms.ModelForm):
     dateDay=forms.IntegerField(help_text="When do you want to achieve this by? Day: ")
     dateMonth=forms.IntegerField(help_text="Month: ")
     dateYear=forms.IntegerField(help_text="Year: ")
+    goalName=forms.CharField(help_text="Type a name for your goal:")
 
     
     class Meta:
         model = Goal
-        fields=('goalAuthor', 'dateSet','goalID','achieved', 'slug', 'dateDay', 'dateMonth', 'dateYear')
+        fields=('goalAuthor', 'dateSet', 'slug', 'dateDay', 'dateMonth', 'dateYear','goalName', 'ISBN')
 
 
