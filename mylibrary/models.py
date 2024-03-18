@@ -8,11 +8,29 @@ from django.contrib.auth.models import User
 class Category(models.Model):
     categoryID=models.CharField(max_length=20, unique=True)
     numOfBooks=models.IntegerField(default=0)
+    slug=models.SlugField(unique = True)
+
+    def __str__(self):
+        return self.categoryID
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.categoryID)
+        super(Category, self).save(*args, **kwargs)
+        
+    class Meta:
+        verbose_name_plural = 'Categories'
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profileLink = models.URLField(blank=True)
-    profilePic=models.ImageField()
+    profilePic=models.ImageField(upload_to='profile_images', blank = True)
+
+    #def save(self, *args, **kwargs):
+        #if not self.slug:
+        #self.slug = slugify(self.name)
+    #super().save(*args, **kwargs)
+    
+        #super(Book,self).save(*args, **kwargs)
 
 
 class Book(models.Model):
@@ -22,7 +40,10 @@ class Book(models.Model):
     coverPhoto=models.ImageField()
     categories = models.ManyToManyField(Category)
     title=models.CharField(max_length=500)
-    slug=models.SlugField(unique=True)
+    slug=models.SlugField()
+
+    def __str__(self):
+        return self.title
 
     def save(self, *args, **kwargs):
         self.slug=slugify(self.title)
@@ -45,10 +66,14 @@ class Admin(models.Model):
 
 class Review(models.Model):
     reviewID=models.CharField(max_length=50, unique=True)
-    dateWritten=models.DateField()
+    message=models.CharField(max_length=50, unique=True)
+    dateWritten=models.DateField(auto_now_add=True)
     edited=models.BooleanField(default=False)
     reviewAuthorFK=models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     reviewBookFK=models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.message
 
 
 
