@@ -2,21 +2,34 @@
 
 {% load staticfiles %}
 
+<<<<<<< Updated upstream
 <link rel="stylesheet" href="{% static 'idk.css' %}">
+=======
+>>>>>>> Stashed changes
 
 <html>
 <head lang="en">
 <meta charset="UTF-8" />
 <title>MyLibrary - {% block title_block %}MyLibrary{% endblock %}</title>
 {% load bootstrap5 %}
+<<<<<<< Updated upstream
 {% bootstrap_css %}
+=======
+>>>>>>> Stashed changes
 {% bootstrap_javascript %}
 
 <link rel="stylesheet" href="{% static 'css/idk.css' %}">
 <body>
+<<<<<<< Updated upstream
 
 <div class="container">
     <ul class="nav bg-info">
+=======
+<nav class="navbar navbar-expand-sm bg-info navbar-light">
+<div class="container">
+    <ul class="nav">
+        <a class="navbar-brand" href="#"><h1></h1>MyLibrary</h1></a>
+>>>>>>> Stashed changes
         <li class="nav-item">
             <a class="nav-link link-light" href="{% url 'mylibrary:index' %}">HOME</a>
         </li>
@@ -24,11 +37,25 @@
             <a class="nav-link link-light" href="{% url 'mylibrary:about' %}">About</a>
         </li>
         {% if user.is_authenticated %}
+<<<<<<< Updated upstream
         <li class="nav-item">
             <a class="nav-link link-light" href="{% url 'mylibrary:explorecategory' %}">Explore Categories</a>
         </li>
         <li class="nav-item">
             <a class="nav-link link-light" href="{% url 'mylibrary:logout' %}">Logout</a>
+=======
+        <a class="nav-link link-light " href = "{% url 'mylibrary:myprofile' %}">
+            {% if user.userprofile.profilePic %}
+                <img src="{{MEDIA_URL}}{{ user.userprofile.profilePic }}" style="width:50px;height:50px;">
+            {% else %}
+            {% endif %}
+        </a>
+        <li class="nav-item">
+            <a class="nav-link link-light " href="{% url 'mylibrary:explorecategory' %}">Explore Categories</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link link-light -item" href="{% url 'mylibrary:logout' %}">Logout</a>
+>>>>>>> Stashed changes
         </li>
         <li class="nav-item">
             <a class="nav-link link-light" href="{% url 'mylibrary:myreviews' %}">MyReviews</a>
@@ -45,10 +72,22 @@
         </li>
         {% endif %}
         <li class="nav-item">
+<<<<<<< Updated upstream
             <a class="nav-link link-light" href="{% url 'mylibrary:explorecategory' %}">Explore Categories</a>
         </li>
     </ul>
     </div>
+=======
+            <a class="nav-link link-light" href="{% url 'mylibrary:search' %}">Explore Categories</a>
+        </li>
+        <form action="{% url 'mylibrary:search' %}">
+            <input type="text" name="search" placeholder="Search by title" value="{{request.GET.title}}">
+            <input type="submit" value="Search">
+        </form>
+    </ul>
+    </div>
+</nav>
+>>>>>>> Stashed changes
 
     <div>
     {% block body_block %}

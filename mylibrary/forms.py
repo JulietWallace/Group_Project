@@ -12,11 +12,11 @@ class BookForm(forms.ModelForm):
     ISBN = forms.IntegerField(help_text="Enter the ISBN of the book")
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
     categories = forms.ModelChoiceField(queryset=Category.objects.all(), help_text="Select the category for the book")
-    book_dict = {"title": title, "author": author,"ISBN":ISBN, "uploadedBy":None}
+    book_dict = {"title": title, "author": author,"ISBN":ISBN, "uploadedBy":None,}
     
     class Meta:
         model = Book
-        fields=('title', 'author','ISBN', 'categories')
+        fields=('title', 'author','ISBN', 'categories', 'coverPhoto',)
 
     def set_uploaded_by(self, user):
         self.book_dict["uploadedBy"]=user

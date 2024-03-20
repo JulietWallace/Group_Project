@@ -9,7 +9,9 @@ These are your goals:
 {% endblock %}
 {% if goals %}
 {% for goal in goals %}
-<li><a href="{{ goal.slug }}">{{ goal.ISBN }}</a></li> {% endfor %}
+<li><a href="{{ goal.slug }}">{{ goal.ISBN }}</a></li> 
+{% endfor %}
+{% end if %}
 
 {% block body_block %}
 Links:

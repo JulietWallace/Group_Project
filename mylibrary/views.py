@@ -22,6 +22,8 @@ def index(request):
 
 def myprofile(request):
     user = User.objects.get(username=request.user.username)
+    context_dict = {}
+    context_dict['user'] = user
     context_dict={"user":user}
     return render(request, 'mylibrary/myprofile.html', context_dict)
 
@@ -52,9 +54,8 @@ def explorecategory(request):
     book_list = Book.objects.all()
     category_list = Category.objects.all()
     context_dict = {}
-    print("YOUR MOM")
-    print((category_list))
     context_dict['categories'] = category_list
+    #context_dict['books'] = book_list
     #context_dict['book'] = book_list
     print(context_dict)
     #context_dict['book'] = book_list
@@ -100,7 +101,7 @@ def register(request):
             profile.user = user
 
             if 'profilePic' in request.FILES:
-                profile.picture = request.FILES['profilePic']
+                profile.profilePic = request.FILES['profilePic']
             profile.save()
             registered = True
         else:
@@ -131,7 +132,7 @@ def mygoals(request):
     context_dict={}
     goals = Goal.objects.filter(goalAuthor=request.user)
     context_dict["goals"] = goals
-    return render(request, "mygoals.html", context=context_dict)
+    return render(request, "mylibrary/mygoals.html", context=context_dict)
 
 def myreviews(request):
     context_dict={}
@@ -144,13 +145,18 @@ def show_book(request, book_name_slug):
     try:
         book=Book.objects.get(slug=book_name_slug)
         review=Review.objects.filter(reviewBookFK=book)
+        #user=User.objects.filter(reviewAuthorFK= user)
         context_dict={}
         context_dict["book"]=book
         context_dict["reviews"]=review
+        #context_dict["users"]=user
     except Book.DoesNotExist:
         context_dict['category']=None
         context_dict['pages']=None
     return render(request, "mylibrary/book.html", context=context_dict)
+
+def current_book(request):
+        return render(request, "mylibrary/book.html", context=context_dict)
 
 def show_category(request, category_name_slug):
 
@@ -159,7 +165,7 @@ def show_category(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
 
-        books = Book.objects.filter(categories=category)
+        books = Book.objects.filter(categories = category)
         print(books)
 
         context_dict['books'] = books

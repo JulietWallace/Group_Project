@@ -18,6 +18,7 @@ class Category(models.Model):
         super(Category, self).save(*args, **kwargs)
         
     class Meta:
+        ordering = ["categoryID"]
         verbose_name_plural = 'Categories'
 
 class UserProfile(models.Model):
@@ -36,9 +37,15 @@ class UserProfile(models.Model):
 class Book(models.Model):
     ISBN=models.IntegerField(unique=True)
     author=models.CharField(max_length=50)
+<<<<<<< Updated upstream
     uploadedBy=models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     coverPhoto=models.ImageField()
     categories = models.ManyToManyField(Category)
+=======
+    uploadedBy=models.ForeignKey(User, on_delete = models.CASCADE, null = True)
+    coverPhoto=models.ImageField(upload_to='book_images')
+    categories =  models.ForeignKey(Category, on_delete = models.CASCADE, null = True)
+>>>>>>> Stashed changes
     title=models.CharField(max_length=500)
     slug=models.SlugField()
 
