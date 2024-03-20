@@ -15,9 +15,13 @@ You have been a member since {{ request.user.date_joined }}
 Your current goals are:
 
 </div>
+<div>
 Links:
 <button class="btn btn-primary" id="about-btn"> Click me - I'm using JQuery!
 </button>
 <li><a href="{% url 'mylibrary:mygoals' %}">MyGoals</a></li>
 <li><a href="{% url 'mylibrary:myreviews' %}">reviews</a></li>
+<li><a href="{% url 'mylibrary:current-books' %}">Current Books</a></li>
+<li><a href="{% url 'mylibrary:past-books' %}">Previously Read</a></li>
+</div>
 {% endblock %}

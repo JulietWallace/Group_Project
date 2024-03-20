@@ -17,5 +17,7 @@
 <h1>{{ book.ISBN }}</h1> 
 <h1>{{ book.author }}</h1> 
 <h1>{{ book.uploadedBy }}</h1> 
-{% endif %}
+<p>Click the button below to start reading!</p>
+<button id="readButton">Start Reading</button>
+<script src="{% static "js/book-jquery.js" %}" crossorigin="anonymous"></script>
 {% endblock %}

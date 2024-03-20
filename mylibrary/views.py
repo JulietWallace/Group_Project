@@ -1,9 +1,6 @@
 from django.shortcuts import render
-<<<<<<< HEAD
 from mylibrary.forms import BookForm, UserProfileForm, UserForm, ReviewForm
-=======
 from mylibrary.forms import BookForm, GoalForm
->>>>>>> 60649341eddbe63f2cbea2418a8bc12987723101
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -11,15 +8,16 @@ from django.utils import timezone
 import django
 from django.urls import reverse
 import datetime
+from django.views import View
 # Create your views here.
 
 from django.http import HttpResponse 
-from mylibrary.models import Book, Category, Review, User, Goal
+from mylibrary.models import Book, Category, Review, User, Goal, UserProfile, BooksUserReading
 
 def index(request):
     category_list = Category.objects.all()
     context_dict = {}
-    print("YOUR MOM")
+    print("YOUR MOM") 
     print((category_list))
     context_dict['categories'] = category_list
     return render(request, 'mylibrary/index.html', context={})
@@ -146,6 +144,30 @@ def myreviews(request):
     context_dict["reviews"] = review
     return render(request, "mylibrary/myreviews.html", context=context_dict)
 
+def book(request,book_name_slug):
+    context_dict={}
+    try:
+        book=Book.objects.get(slug=book_name_slug)
+        review=Review.objects.filter(reviewBookFK=book) #maybe add in an order by feature
+        context_dict={}
+        context_dict["book"]=book
+        context_dict["reviews"]=review
+        #context_dict['readingList']=UserProfile.objects.get(user=request.user).books_reading
+        context_dict["user"] = UserProfile.objects.get(user=request.user)
+    except Book.DoesNotExist:
+        context_dict['category']=None
+        context_dict['pages']=None
+        context_dict['readingList']=None
+    return render(request, "mylibrary/book.html", context=context_dict)
+
+def curr_books(request):
+    context_dict={}
+    context_dict['books']=[]
+    context_dict['books'] = BooksUserReading.objects.filter(userFK=request.user)
+    return render(request, "mylibrary/currentbooks.html", context=context_dict)
+
+
+
 def show_book(request, book_name_slug):
     context_dict={}
     try:
@@ -198,12 +220,11 @@ def add_book(request):
 def about(request):
     return render(request, 'mylibrary/about.html', context={})
 
-<<<<<<< HEAD
 @login_required
 def user_logout(request):
     logout(request)
     return redirect(reverse('mylibrary:index'))
-=======
+
 def show_goal(request, goal_slug):
     context_dict={}
     try:
@@ -211,7 +232,33 @@ def show_goal(request, goal_slug):
         context_dict["goal"]=goal
     except Goal.DoesNotExist:
         context_dict["goal"]=None
-    return render(request, "mylibrary/goal.html", context=context_dict)
->>>>>>> 60649341eddbe63f2cbea2418a8bc12987723101
+    return render(request, "mylibrary/goal.html", context=context_dict) 
+
+class LikeCategoryView(): #Taken from tango with django
+    def get(self, request):
+        category_id = request.GET['category_id'] 
+        try:
+            category = Category.objects.get(id=int(category_id)) 
+        except Category.DoesNotExist:
+            return HttpResponse(-1) 
+        except ValueError:
+            return HttpResponse(-1) 
+        category.likes = category.likes + 1
+        category.save()
+        return HttpResponse(category.likes)
+    
+#This should add book to the user's reading list when they click the button
+class BookReadView(View): 
+    def get(self, request):
+        user=UserProfile.objects.get(user=request.user)
+        book_ISBN = request.GET['ISBN']
+        book = Book.objects.get(ISBN = book_ISBN) 
+        obj = BooksUserReading(user,book)
+        book.users_reading.append(user)
+        user.books_reading.append(book)
+        book.save()
+        user.save()
+        obj.save()
+        return HttpResponse(user.books_reading)
 
 

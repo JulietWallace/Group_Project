@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 {% extends 'mylibrary/base.html' %}
+{% load staticfiles %}
+
+<link rel="stylesheet" href="{% static 'idk.css' %}">
 {% block body_block %}
-<<<<<<< HEAD
 <html>
 
     <head>
@@ -43,16 +45,9 @@
               </div>
             {% endfor %}
             <li><a href="/mylibrary/book/{{ book.slug }}/write_review">Write review</a></li>
-    </div>
+            <h5>Click this button to upload this book to your library!</h5>
+            <button id="readButton" data-bookISBN="{{ book.ISBN }}" data-userID="{{ user }}">Start Reading</button>
+            </div>
     </body>
-
+    {% endblock %}
 </html>
-=======
-{% if book %}
-<h1>{{ book.title }}</h1> 
-<h1>{{ book.ISBN }}</h1> 
-<h1>{{ book.author }}</h1> 
-<h1>{{ book.uploadedBy }}</h1> 
-{% endif %}
->>>>>>> 60649341eddbe63f2cbea2418a8bc12987723101
-{% endblock %}

@@ -11,6 +11,15 @@
     <div>
         {% if category %}
             <h1>{{ category.categoryID }}</h1>
+            <div>
+            <strong id="like_count">{{ category.likes }}</strong> likes
+            <button id="like_btn"
+            data-categoryid="{{ category.id }}" #Taken from tango with django
+            class="btn btn-primary btn-sm"
+            type="button">
+            <span data-feather="thumbs-up"></span>
+            Like Category </button>
+            </div>
             {% if books %}
             <ul>
                 {% for book in books %}

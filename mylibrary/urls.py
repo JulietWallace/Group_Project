@@ -15,15 +15,13 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
     path('mygoals/', views.mygoals, name='mygoals'),
-<<<<<<< HEAD
     path('myreviews/', views.myreviews, name='myreviews'),
     path('explorecategory/', views.explorecategory, name='explorecategory'),
     path('category/<slug:category_name_slug>', views.show_category, name='show_category'),
     path('set_goal/', views.mygoals, name='set_goal'),
     path('logout/', views.user_logout, name='logout'),
-=======
-    path('setgoal/', views.setgoal, name='setgoal'),
-    path('mygoals/<slug:goal_slug>/', views.show_goal, name='show_goal'),
->>>>>>> 60649341eddbe63f2cbea2418a8bc12987723101
+    path('like_category/', views.LikeCategoryView, name='like_category'),
+    path('read_book/', views.BookReadView.as_view(), name='read_book'),
+    path('current-books/', views.curr_books, name='current-books'),
 
 ]

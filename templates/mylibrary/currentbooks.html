@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+{% extends 'mylibrary/base.html' %}
+{% load staticfiles %}
+
+{% for book in books %}
+{{ book.bookFK.title }}
+{{ book.pagesRead }}
+{{% endfor %}}
