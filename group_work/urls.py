@@ -16,6 +16,8 @@ Including another URLconf
 from django.urls import path, include
 from mylibrary import views
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -25,4 +27,4 @@ urlpatterns = [
     path('myreviews/', views.myreviews, name='myreviews'),
     path('register/', views.register, name='register'),
     path("admin/", admin.site.urls),
-]
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(180, 180, 180);
+    background-color: rgb(255, 255, 255);
     font-family:'Times New Roman', Times, serif;
 }
 
@@ -7,29 +7,96 @@ body{
     color:orange;
 }
 
+.nav-link:hover {
+  color:  rgb(24, 164, 122) !important;
+  border-bottom: 2px solid white;
+}
+
+.nav-link:hover::after {
+ opacity: 1;
+}
+
+
+.nav-link::after {
+  color:  rgb(24, 164, 122);
+  content: '';
+  opacity: 0;
+  transition: all 0.2s;
+  height: 2px;
+  width: 100%;
+  background-color: white;
+  position: absolute;
+  bottom:0;
+  left: 0;
+}
+
+.nav-link {
+  color:  rgb(198, 71, 71);
+}
+
+.nav-item {
+  color:  rgb(198, 71, 71);
+}
+
+body {
+    font-family: Arial, sans-serif; /* default font */
+    margin: 0; 
+    padding: 0;
+}
+
+/* Buttons */
+.btn {
+    background-color: #007bff; /* Background */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Effect */
+.btn:hover { 
+    background-color: #000000;
+}
+
+#about-btn {
+    background-color: orange;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+form input[type="text"], form textarea {
+    width: 100%; 
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+
 * {box-sizing:border-box}
 
 /* Slideshow container */
 .slideshow-container {
-  max-width: 1000px;
+  max-width: 500px;
   position: relative;
   margin: auto;
 }
 
 /* Hide the images by default */
 .mySlides {
-  display: none;
 }
 
 /* Next & previous buttons */
 .prev, .next {
   cursor: pointer;
   position: absolute;
-  top: 50%;
+  top: 60%;
   width: auto;
   margin-top: -22px;
   padding: 16px;
-  color: white;
+  color: black;
   font-weight: bold;
   font-size: 18px;
   transition: 0.6s ease;
@@ -87,11 +154,11 @@ body{
 /* Fading animation */
 .fade {
   animation-name: fade;
-  animation-duration: 1.5s;
+  animation-duration: 3000s;
 }
 
 @keyframes fade {
-  from {opacity: .4}
+  from {opacity: 1}
   to {opacity: 1}
 }
 

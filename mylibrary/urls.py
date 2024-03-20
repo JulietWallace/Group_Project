@@ -20,8 +20,5 @@ urlpatterns = [
     path('category/<slug:category_name_slug>', views.show_category, name='show_category'),
     path('set_goal/', views.mygoals, name='set_goal'),
     path('logout/', views.user_logout, name='logout'),
-    path('like_category/', views.LikeCategoryView, name='like_category'),
-    path('read_book/', views.BookReadView.as_view(), name='read_book'),
-    path('current-books/', views.curr_books, name='current-books'),
 
 ]

@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from mylibrary.forms import BookForm, UserProfileForm, UserForm, ReviewForm
-from mylibrary.forms import BookForm, GoalForm
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -22,9 +21,22 @@ def index(request):
     context_dict['categories'] = category_list
     return render(request, 'mylibrary/index.html', context={})
 
+def search(request):
+    #results = Book.objects.filter(name__icontains=query)
+    books = Book.objects.filter(title__icontains=request.GET.get('search'))
+    context_dict = {}
+    context_dict['books'] = books
+
+    return render(request, 'mylibrary/search_results.html', context_dict)
+
+def search_results(request):
+    #results = Book.objects.filter(name__icontains=query)
+    print(results)
+    results = {}
+    return render(request, 'mylibrary/search_results.html', {'results': results})    
+
 def myprofile(request):
-    print(request.user)
-    user = User.objects.get(username=request.user)
+    user = User.objects.get(username=request.user.username)
     context_dict={"user":user}
     return render(request, 'mylibrary/myprofile.html', context_dict)
 
@@ -114,29 +126,27 @@ def register(request):
     return render(request, "mylibrary/register.html", context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
 
-def setgoal(request):
+def set_goal(request):
     form = GoalForm()
 
     if request.method == 'POST':
-        goal =  GoalForm(request.POST)
+        goal =  BookForm(request.POST)
         if form.is_valid():
-            print("valid")
             goal=form.save(commit=False)
             goal.goalAuthor=request.user
             goal.dateSet=datetime.datetime.now()
             goal.save()
-            return redirect(reverse('mylibrary:show_goal', kwargs={'goal_slug': goal.slug}))
+            return redirect(reverse('mylibrary:mygoals'))
         else:
-            print("form errors")
             print(form.errors)
     
-    return render(request, 'mylibrary/setgoal.html', {'form': form})
+    return render(request, 'mylibrary/mygoals.html', {'form': form})
 
 def mygoals(request):
     context_dict={}
     goals = Goal.objects.filter(goalAuthor=request.user)
     context_dict["goals"] = goals
-    return render(request, "mylibrary/mygoals.html", context=context_dict)
+    return render(request, "mygoals.html", context=context_dict)
 
 def myreviews(request):
     context_dict={}
@@ -205,12 +215,14 @@ def add_book(request):
     form = BookForm()
 
     if request.method == 'POST':
-        form =  BookForm(request.POST)
+        form =  BookForm(request.POST, request.FILES)
         if form.is_valid():
             book=form.save(commit=False)
             book.uploadedBy=request.user
+            if 'photoCover' in request.FILES:
+                book.photoCover = request.FILES['photoCover']
             book.save()
-            #show_book(request, book.slug)
+            show_book(request, book.slug)
             return redirect(reverse('mylibrary:show_book', kwargs={'book_name_slug': book.slug}))
         else:
             print(form.errors)
@@ -224,41 +236,5 @@ def about(request):
 def user_logout(request):
     logout(request)
     return redirect(reverse('mylibrary:index'))
-
-def show_goal(request, goal_slug):
-    context_dict={}
-    try:
-        goal=Goal.objects.get(slug=goal_slug)
-        context_dict["goal"]=goal
-    except Goal.DoesNotExist:
-        context_dict["goal"]=None
-    return render(request, "mylibrary/goal.html", context=context_dict) 
-
-class LikeCategoryView(): #Taken from tango with django
-    def get(self, request):
-        category_id = request.GET['category_id'] 
-        try:
-            category = Category.objects.get(id=int(category_id)) 
-        except Category.DoesNotExist:
-            return HttpResponse(-1) 
-        except ValueError:
-            return HttpResponse(-1) 
-        category.likes = category.likes + 1
-        category.save()
-        return HttpResponse(category.likes)
-    
-#This should add book to the user's reading list when they click the button
-class BookReadView(View): 
-    def get(self, request):
-        user=UserProfile.objects.get(user=request.user)
-        book_ISBN = request.GET['ISBN']
-        book = Book.objects.get(ISBN = book_ISBN) 
-        obj = BooksUserReading(user,book)
-        book.users_reading.append(user)
-        user.books_reading.append(book)
-        book.save()
-        user.save()
-        obj.save()
-        return HttpResponse(user.books_reading)
 
 

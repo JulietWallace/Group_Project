@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 {% extends 'mylibrary/base.html' %}
+<<<<<<< HEAD
+{{ MEDIA_URL }}
 {% load staticfiles %}
-
-<link rel="stylesheet" href="{% static 'idk.css' %}">
+=======
+>>>>>>> Dylan2
 {% block body_block %}
 <html>
 
@@ -26,19 +28,40 @@
 
     <div>
             <div class="container mt-5">
+<<<<<<< HEAD
+                <div class="row">
+                  <div class="col-sm-4">
+=======
                 <div class="col">
                   <div class="col-sm-4">
                     <h1>{{ book.coverPhoto }}</h1>
+>>>>>>> Dylan2
                     <h1>{{ book.uploadedby }}</h1>
                     <h1>{{ book.bookCategory }}</h1>
                   </div>
                 </div>
+<<<<<<< HEAD
+                  <div class="col-sm-5">
+                    <img src="{{ MEDIA_URL }}{{ book.coverPhoto }}" style="width:300px;height:300px;">
+                </div>
               </div>
+
+=======
+              </div>
+>>>>>>> Dylan2
             {% for review in reviews %}
             <div class="container mt-5">
                 <div class="col">
                   <div class="col-sm-4">
                     <h3>{{review.reviewAuthorFK}} {{review.dateWritten}}</h3>
+<<<<<<< HEAD
+                    {% if review.reviewAuthorFK.userprofile.profilePic %}
+                    <img src="{{MEDIA_URL}}{{ review.reviewAuthorFK.userprofile.profilePic }}" style="width:50px;height:50px;">
+                    {% else %}
+                    <img src="{% static 'img/opo.jpg' %}" style="width:50px;height:50px;">
+                    {% endif %}
+=======
+>>>>>>> Dylan2
                     <p>{{ review.message }}</p>
                   </div>
                 </div>
@@ -51,3 +74,4 @@
     </body>
     {% endblock %}
 </html>
+{% endblock %}
