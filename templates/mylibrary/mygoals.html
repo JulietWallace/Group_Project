@@ -7,14 +7,11 @@
 {% block title_block %}
 These are your goals:
 {% endblock %}
-{% block body_block %}
 {% if goals %}
 {% for goal in goals %}
-{{ goal.goalName }}
 <li><a href="{{ goal.slug }}">{{ goal.ISBN }}</a></li> {% endfor %}
-{% else %}
-<strong>No goals currently set.</strong>
-{% endif %}
+
+{% block body_block %}
 Links:
-<li><a href="{% url 'mylibrary:setgoal' %}">Set Goal</a></li>
+<li><a href="{% url 'mylibrary:add_book' %}">Add Book</a></li>
 {% endblock %}

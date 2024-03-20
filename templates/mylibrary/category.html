@@ -9,12 +9,24 @@
 
     <body>
     <div>
+        <div class="container mt-5">
+        <div class="col">
+        <div class="col-sm-4">
         {% if category %}
             <h1>{{ category.categoryID }}</h1>
             {% if books %}
+            </div>
+            </div>
+            </div>
             <ul>
                 {% for book in books %}
-                <li><a href="/mylibrary/book/{{ book.slug }}/">{{ book.title }}</a></li>
+                <div class="container mt-5">
+                <div class="col">
+                  <div class="col-sm-4">
+                    <li><a href="/mylibrary/book/{{ book.slug }}/">{{ book.title }}</a></li>
+                  </div>
+                </div>
+              </div>
                 {% endfor %}
             </ul>
             {% else %}

@@ -6,7 +6,7 @@
 
 
 
-    {% block title_block %}
+{% block title_block %}
 MyLibrary
 {% endblock %}
 
@@ -22,11 +22,9 @@ Links:
         <h1> {{ category }}</h1>
 {%endfor%}
 <h1> welcome {{ user.username }}</h1>
-<h1> welcome {{ category.catergoryID }}</h1>
 <li><a href="{% url 'mylibrary:add_book' %}">Add Book</a></li>
 <li><a href="{% url 'mylibrary:about' %}">About</a></li>
 <li><a href="{% url 'mylibrary:explorecategory' %}"> explore Categories</a></li>
-<li><a href="/mylibrary/category/{{category.slug}}"> {{category.categoryID}}</a></li>
 {% if categories %}
     {% for category in categories %}
     <li><a href="/mylibrary/category/{{category.slug}}"> {{category.categoryID}}</a></li>

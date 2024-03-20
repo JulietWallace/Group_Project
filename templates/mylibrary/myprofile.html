@@ -11,6 +11,12 @@ Hello
 {% block body_block %}
 <div>
 Hello {{ request.user.username }}
+{% if user.userprofile.profilePic %}
+    <img src="{{MEDIA_URL}}{{ user.userprofile.profilePic }}">
+{% else %}
+    <img src="{% static 'img/opo.jpg' %}" style="width:300px;height:300px;">
+{% endif %}
+
 You have been a member since {{ request.user.date_joined }}
 Your current goals are:
 
