@@ -38,6 +38,7 @@ function showSlides(n) {
   }
   slides[slideIndex-1].style.display = "block";
   dots[slideIndex-1].className += " active";
+<<<<<<< HEAD
 }
 
 showAutoSlides();
@@ -57,4 +58,6 @@ function showAutoSlides() {
   slides[slideIndex-1].style.display = "block";  
   dots[slideIndex-1].className += " active";
   setTimeout(showAutoSlides, 4000); // Change image every 4 seconds, 1000 = 1 sec
+=======
+>>>>>>> Dylan2
 }

@@ -36,8 +36,6 @@ def search_results(request):
 
 def myprofile(request):
     user = User.objects.get(username=request.user.username)
-    context_dict = {}
-    context_dict['user'] = user
     context_dict={"user":user}
     return render(request, 'mylibrary/myprofile.html', context_dict)
 
@@ -116,7 +114,7 @@ def register(request):
             profile.user = user
 
             if 'profilePic' in request.FILES:
-                profile.profilePic = request.FILES['profilePic']
+                profile.picture = request.FILES['profilePic']
             profile.save()
             registered = True
         else:
@@ -160,18 +158,13 @@ def show_book(request, book_name_slug):
     try:
         book=Book.objects.get(slug=book_name_slug)
         review=Review.objects.filter(reviewBookFK=book)
-        #user=User.objects.filter(reviewAuthorFK= user)
         context_dict={}
         context_dict["book"]=book
         context_dict["reviews"]=review
-        #context_dict["users"]=user
     except Book.DoesNotExist:
         context_dict['category']=None
         context_dict['pages']=None
     return render(request, "mylibrary/book.html", context=context_dict)
-
-def current_book(request):
-        return render(request, "mylibrary/book.html", context=context_dict)
 
 def show_category(request, category_name_slug):
 
