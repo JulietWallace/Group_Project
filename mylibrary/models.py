@@ -43,6 +43,7 @@ class Book(models.Model):
     categories = models.ManyToManyField(Category)
     title=models.CharField(max_length=500)
     slug=models.SlugField()
+    totalPages=models.IntegerField()
 
     def __str__(self):
         return self.title
@@ -50,6 +51,33 @@ class Book(models.Model):
     def save(self, *args, **kwargs):
         self.slug=slugify(self.title)
         super(Book,self).save(*args, **kwargs)
+<<<<<<< HEAD
+=======
+    
+    def add_to_reading_list(self, user):
+        self.usersReading.append(user)
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profilePic=models.ImageField(upload_to='profile_images', blank = True)
+    #slug = models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+    
+        super(UserProfile,self).save(*args, **kwargs)
+    
+
+
+class BooksUserReading(models.Model):
+    userFK = models.OneToOneField(UserProfile, on_delete=models.CASCADE, unique=False)
+    bookFK = models.OneToOneField(Book, on_delete=models.CASCADE, unique=False)
+    startedReading=models.DateTimeField(null=True)
+    pagesRead=models.IntegerField(null=True)
+
+    #def save(self, *args, **kwargs):
+        #super(BooksUserReading,self).save(*args, **kwargs)
+>>>>>>> juliet7
 
 
 class Goal(models.Model):

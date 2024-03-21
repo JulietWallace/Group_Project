@@ -1,6 +1,8 @@
 from django.urls import path
 from mylibrary import views
 from django.contrib import admin
+from django.views import View
+from mylibrary.views import user_read_book
 
 app_name = 'mylibrary'
 
@@ -23,6 +25,11 @@ urlpatterns = [
     path('explorecategory/', views.explorecategory, name='explorecategory'),
     path('category/<slug:category_name_slug>', views.show_category, name='show_category'),
     path('logout/', views.user_logout, name='logout'),
+<<<<<<< HEAD
 
 
+=======
+    path('currentbooks/', views.curr_books, name='currentbooks'),
+    path('user_read_book/', views.user_read_book.as_view(), name='user_read_book'),
+>>>>>>> juliet7
 ]
