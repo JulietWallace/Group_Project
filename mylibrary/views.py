@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from mylibrary.forms import BookForm, UserProfileForm, UserForm, ReviewForm
+from mylibrary.forms import BookForm, UserProfileForm, UserForm, ReviewForm, GoalForm, CategoryForm
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -10,15 +10,28 @@ import datetime
 # Create your views here.
 
 from django.http import HttpResponse 
-from mylibrary.models import Book, Category, Review, User, Goal
+from mylibrary.models import Book, Category, Review, User, Goal, UserProfile
 
 def index(request):
     category_list = Category.objects.all()
     context_dict = {}
-    print("YOUR MOM")
     print((category_list))
     context_dict['categories'] = category_list
     return render(request, 'mylibrary/index.html', context={})
+
+def search(request):
+    #results = Book.objects.filter(name__icontains=query)
+    books = Book.objects.filter(title__icontains=request.GET.get('search'))
+    context_dict = {}
+    context_dict['books'] = books
+
+    return render(request, 'mylibrary/search_results.html', context_dict)
+
+def search_results(request):
+    #results = Book.objects.filter(name__icontains=query)
+    print(results)
+    results = {}
+    return render(request, 'mylibrary/search_results.html', {'results': results})    
 
 def myprofile(request):
     user = User.objects.get(username=request.user.username)
@@ -62,6 +75,20 @@ def explorecategory(request):
 
     #images = Book.
     return render(request, 'mylibrary/explorecategory.html', context = context_dict)
+
+def add_category(request):
+    form = CategoryForm()
+
+    if request.method =='POST':
+        form = CategoryForm(request.POST)
+
+        if form.is_valid():
+            form.save(commit=True)
+
+            return redirect('/rango/home')
+        else:
+            print(form.errors)
+    return render(request, 'rango/add_category.html', {'form':form})
     
 
 def user_login(request):
@@ -118,15 +145,15 @@ def set_goal(request):
     if request.method == 'POST':
         goal =  BookForm(request.POST)
         if form.is_valid():
-            goal=form.save(commit=False)
-            goal.goalAuthor=request.user
-            goal.dateSet=datetime.datetime.now()
-            goal.save()
-            return redirect(reverse('mylibrary:mygoals'))
+            form=form.save(commit=False)
+            form.goalAuthor=request.user
+            form.dateSet=datetime.datetime.now()
+            form.save()
+
         else:
             print(form.errors)
     
-    return render(request, 'mylibrary/mygoals.html', {'form': form})
+    return render(request, "mylibrary/set_goal.html", {'form': form})
 
 def mygoals(request):
     context_dict={}
@@ -145,10 +172,13 @@ def show_book(request, book_name_slug):
     try:
         book=Book.objects.get(slug=book_name_slug)
         review=Review.objects.filter(reviewBookFK=book)
+        categories = book.categories.all()
         #user=User.objects.filter(reviewAuthorFK= user)
         context_dict={}
         context_dict["book"]=book
         context_dict["reviews"]=review
+        context_dict["categories"]=categories
+        print(categories)
         #context_dict["users"]=user
     except Book.DoesNotExist:
         context_dict['category']=None
@@ -182,11 +212,15 @@ def add_book(request):
     form = BookForm()
 
     if request.method == 'POST':
-        form =  BookForm(request.POST)
+        form =  BookForm(request.POST, request.FILES)
         if form.is_valid():
             book=form.save(commit=False)
             book.uploadedBy=request.user
+            categories = form.cleaned_data['categories']
+            if 'photoCover' in request.FILES:
+                book.photoCover = request.FILES['photoCover']
             book.save()
+            book.categories.set(categories)
             show_book(request, book.slug)
             return redirect(reverse('mylibrary:show_book', kwargs={'book_name_slug': book.slug}))
         else:
@@ -201,5 +235,4 @@ def about(request):
 def user_logout(request):
     logout(request)
     return redirect(reverse('mylibrary:index'))
-
 

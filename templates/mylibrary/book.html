@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 {% extends 'mylibrary/base.html' %}
-<<<<<<< Updated upstream
-=======
 {{ MEDIA_URL }}
 {% load staticfiles %}
->>>>>>> Stashed changes
 {% block body_block %}
 <html>
 
@@ -28,40 +25,29 @@
 
     <div>
             <div class="container mt-5">
-<<<<<<< Updated upstream
-                <div class="col">
-                  <div class="col-sm-4">
-                    <h1>{{ book.coverPhoto }}</h1>
-=======
                 <div class="row">
                   <div class="col-sm-4">
->>>>>>> Stashed changes
-                    <h1>{{ book.uploadedby }}</h1>
-                    <h1>{{ book.categories }}</h1>
+                    <h3>Categories:</h3>
+                    {% for category in categories %}
+                    <h6>{{ category}}</h6>
+                    {% endfor %}
                   </div>
                 </div>
-<<<<<<< Updated upstream
-              </div>
-=======
                   <div class="col-sm-5">
                     <img src="{{ MEDIA_URL }}{{ book.coverPhoto }}" style="width:300px;height:300px;">
                 </div>
               </div>
 
->>>>>>> Stashed changes
             {% for review in reviews %}
             <div class="container mt-5">
                 <div class="col">
                   <div class="col-sm-4">
                     <h3>{{review.reviewAuthorFK}} {{review.dateWritten}}</h3>
-<<<<<<< Updated upstream
-=======
                     {% if review.reviewAuthorFK.userprofile.profilePic %}
                     <img src="{{MEDIA_URL}}{{ review.reviewAuthorFK.userprofile.profilePic }}" style="width:50px;height:50px;">
                     {% else %}
                     <img src="{% static 'img/opo.jpg' %}" style="width:50px;height:50px;">
                     {% endif %}
->>>>>>> Stashed changes
                     <p>{{ review.message }}</p>
                   </div>
                 </div>

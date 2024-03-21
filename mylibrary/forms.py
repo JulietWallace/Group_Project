@@ -11,7 +11,8 @@ class BookForm(forms.ModelForm):
     author = forms.CharField(max_length=50, help_text="Enter the author of the book")
     ISBN = forms.IntegerField(help_text="Enter the ISBN of the book")
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
-    categories = forms.ModelChoiceField(queryset=Category.objects.all(), help_text="Select the category for the book")
+    categories = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), help_text="Select the categories for the book",
+                                        widget = forms.CheckboxSelectMultiple)
     book_dict = {"title": title, "author": author,"ISBN":ISBN, "uploadedBy":None,}
     
     class Meta:
@@ -23,6 +24,16 @@ class BookForm(forms.ModelForm):
 
     def get_book_dict(self):
         return self.book_dict
+    
+class CategoryForm(forms.ModelForm):
+    CategoryID = forms.CharField(max_length=128, help_text="PLease enter the category name.")
+    numOfBooks = forms.IntegerField(widget=forms.HiddenInput, initial=0)
+    slug = forms.CharField(widget=forms.HiddenInput, required=False)
+    category_dict = {"CategoryID": CategoryID,}
+
+    class Meta:
+        model = Category
+        fields = ('CategoryID',)
     
 class ReviewForm(forms.ModelForm):
     message = forms.CharField(max_length=128, help_text="Write review")
@@ -40,14 +51,15 @@ class GoalForm(forms.ModelForm):
     ISBN = forms.IntegerField(help_text="Enter the ISBN of the book this goal refers to")
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
     numPages=forms.IntegerField(help_text="How many pages do you want to read?")
-    dateDay=forms.IntegerField(help_text="When do you want to achieve this by? Day: ")
-    dateMonth=forms.IntegerField(help_text="Month: ")
-    dateYear=forms.IntegerField(help_text="Year: ")
+    dateDay=forms.DateInput()
+    goalID = forms.CharField(max_length=128, help_text="Enter the title of the book")
+
+    goal_dict = {"ISBN": ISBN, "goalID":goalID}
 
     
     class Meta:
         model = Goal
-        fields=('goalAuthor', 'dateSet','goalID','achieved', 'slug', 'dateDay', 'dateMonth', 'dateYear')
+        fields=('goalID', 'ISBN',)
 
 
 class MinimumLengthValidator:

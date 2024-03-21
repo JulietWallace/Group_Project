@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib import admin
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+from datetime import datetime
 
 class Category(models.Model):
     categoryID=models.CharField(max_length=20, unique=True)
@@ -37,15 +38,9 @@ class UserProfile(models.Model):
 class Book(models.Model):
     ISBN=models.IntegerField(unique=True)
     author=models.CharField(max_length=50)
-<<<<<<< Updated upstream
-    uploadedBy=models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    coverPhoto=models.ImageField()
-    categories = models.ManyToManyField(Category)
-=======
     uploadedBy=models.ForeignKey(User, on_delete = models.CASCADE, null = True)
     coverPhoto=models.ImageField(upload_to='book_images')
-    categories =  models.ForeignKey(Category, on_delete = models.CASCADE, null = True)
->>>>>>> Stashed changes
+    categories = models.ManyToManyField(Category)
     title=models.CharField(max_length=500)
     slug=models.SlugField()
 
@@ -56,16 +51,19 @@ class Book(models.Model):
         self.slug=slugify(self.title)
         super(Book,self).save(*args, **kwargs)
 
+
 class Goal(models.Model):
     goalAuthor=models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     dateSet=models.DateTimeField()
     achieved=models.BooleanField()
     goalID=models.CharField(max_length=50,unique=True)
     numPages=models.IntegerField(null=True)
-    dateDay=models.IntegerField(null=True)
-    dateMonth=models.IntegerField(null=True)
-    dateYear=models.IntegerField(null=True)
+    dateDue = models.DateTimeField(default = datetime.now())
     slug=models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug=slugify(self.goalID)
+        super(Goal,self).save(*args, **kwargs)
 
 
 class Admin(models.Model):

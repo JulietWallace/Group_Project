@@ -31,6 +31,7 @@ MyLibrary
 <li><a href="{% url 'mylibrary:logout' %}">Logout</a></li>
 <li><a href="{% url 'mylibrary:myreviews' %}">reviews</a></li>
 <li><a href="{% url 'mylibrary:explorecategory' %}"> explore Categories</a></li>
+<li><a href="{% url 'mylibrary:set_goal' %}"> set Goal</a></li>
 {% if categories %}
     {% for category in categories %}
     <li><a href="/mylibrary/category/{{category.slug}}"> {{category.categoryID}}</a></li>
@@ -49,7 +50,7 @@ MyLibrary
   
     <div class="mySlides fade">
       <div class="numbertext">2 / 3</div>
-      <img src="{% static 'img/cat.gif' %}" style="width:500px;height:300px;"">
+      <img src="{% static 'img/cat.gif' %}" style="width:500px;height:300px;">
       <div class="text">Caption Two</div>
     </div>
   
