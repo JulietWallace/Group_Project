@@ -31,7 +31,7 @@ class Book(models.Model):
     categories = models.ManyToManyField(Category)
     title=models.CharField(max_length=500)
     slug=models.SlugField()
-    users_reading=[]
+    totalPages=models.IntegerField(null=True)
 
     def __str__(self):
         return self.title
@@ -45,37 +45,24 @@ class Book(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profileLink = models.URLField(blank=True)
     profilePic=models.ImageField(upload_to='profile_images', blank = True)
-    books_reading=[]
+    #slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
         super().save(*args, **kwargs)
     
         super(UserProfile,self).save(*args, **kwargs)
-
-    def add_to_books_list(self, book):
-        self.usersReading.append(book)
-
-    def get_books_list(self):
-        return self.books_reading
     
 
 
 class BooksUserReading(models.Model):
-    userFK = models.OneToOneField(User, on_delete=models.CASCADE)
-    bookFK = models.OneToOneField(Book, on_delete=models.CASCADE)
-    startedReading=models.DateTimeField()
-    pagesRead=models.IntegerField()
-    def __init__(self, userFK, bookFK):
-        self.userFK=userFK
-        self.bookFK=bookFK
-        self.startedReading=datetime.datetime.now()
-        self.pagesRead=0
-    def save(self, *args, **kwargs):
-        super(BooksUserReading,self).save(*args, **kwargs)
+    userFK = models.OneToOneField(UserProfile, on_delete=models.CASCADE, unique=False)
+    bookFK = models.OneToOneField(Book, on_delete=models.CASCADE, unique=False)
+    startedReading=models.DateTimeField(null=True)
+    pagesRead=models.IntegerField(null=True)
+
+    #def save(self, *args, **kwargs):
+        #super(BooksUserReading,self).save(*args, **kwargs)
 
 
 class Goal(models.Model):

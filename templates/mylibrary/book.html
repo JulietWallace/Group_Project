@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 {% extends 'mylibrary/base.html' %}
-<<<<<<< HEAD
 {{ MEDIA_URL }}
 {% load staticfiles %}
-=======
->>>>>>> Dylan2
 {% block body_block %}
 <html>
 
@@ -28,50 +25,48 @@
 
     <div>
             <div class="container mt-5">
-<<<<<<< HEAD
                 <div class="row">
                   <div class="col-sm-4">
-=======
-                <div class="col">
-                  <div class="col-sm-4">
-                    <h1>{{ book.coverPhoto }}</h1>
->>>>>>> Dylan2
                     <h1>{{ book.uploadedby }}</h1>
                     <h1>{{ book.bookCategory }}</h1>
                   </div>
                 </div>
-<<<<<<< HEAD
                   <div class="col-sm-5">
                     <img src="{{ MEDIA_URL }}{{ book.coverPhoto }}" style="width:300px;height:300px;">
                 </div>
               </div>
 
-=======
-              </div>
->>>>>>> Dylan2
             {% for review in reviews %}
             <div class="container mt-5">
                 <div class="col">
                   <div class="col-sm-4">
                     <h3>{{review.reviewAuthorFK}} {{review.dateWritten}}</h3>
-<<<<<<< HEAD
                     {% if review.reviewAuthorFK.userprofile.profilePic %}
                     <img src="{{MEDIA_URL}}{{ review.reviewAuthorFK.userprofile.profilePic }}" style="width:50px;height:50px;">
                     {% else %}
                     <img src="{% static 'img/opo.jpg' %}" style="width:50px;height:50px;">
                     {% endif %}
-=======
->>>>>>> Dylan2
                     <p>{{ review.message }}</p>
                   </div>
                 </div>
               </div>
             {% endfor %}
-            <li><a href="/mylibrary/book/{{ book.slug }}/write_review">Write review</a></li>
-            <h5>Click this button to upload this book to your library!</h5>
-            <button id="readButton" data-bookISBN="{{ book.ISBN }}" data-userID="{{ user }}">Start Reading</button>
             </div>
+            <div>
+            <li><a href="/mylibrary/book/{{ book.slug }}/write_review">Write review</a></li>
+            {% if reads %}
+            <h5 id="readHeader">Click this button to upload this book to your library!</h5>
+            <button id="readButton" data-book="{{ book.ISBN }}" data-userID="{{ user.user }}">Start Reading</button>
+            {% else %}
+            <div class="progress"> 
+              <div class="progressbar" role="progressbar" aria-valuenow="70"
+              aria-valuemin="0" aria-valuemax="100">
+                70%
+              </div>
+            </div>
+            <button id="readButton" data-book="{{ book.ISBN }}" data-userID="{{ user.user }}">Stop Reading</button>
+            </div>
+            {% endif %}
     </body>
     {% endblock %}
 </html>
-{% endblock %}

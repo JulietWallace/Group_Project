@@ -10,6 +10,7 @@ class BookForm(forms.ModelForm):
     title = forms.CharField(max_length=128, help_text="Enter the title of the book")
     author = forms.CharField(max_length=50, help_text="Enter the author of the book")
     ISBN = forms.IntegerField(help_text="Enter the ISBN of the book")
+    totalPages = forms.IntegerField(help_text="Enter the number of pages the book has")
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
     categories = forms.ModelChoiceField(queryset=Category.objects.all(), help_text="Select the category for the book")
     book_dict = {"title": title, "author": author,"ISBN":ISBN, "uploadedBy":None}

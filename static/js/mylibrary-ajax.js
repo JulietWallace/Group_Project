@@ -1,27 +1,31 @@
 $(document).ready(function() { 
-    $('#like_btn').click(function() {
-    var catecategoryIdVar;
-    catecategoryIdVar = $(this).attr('data-categoryid');
-    
-    $.get('/mylibrary/like_category/', 
-    {'category_id': catecategoryIdVar}, 
-    function(data) {
-        $('#like_count').html(data);
-        $('#like_btn').hide();
-    })
+    $('#readButton').click(function() {
+    var value = $('#readButton').html()
+    var stopMessage="Stop Reading"
+    var startMessage="Start Reading"
+    var bookISBN;
+    var userID;
+    bookISBN = $(this).attr('data-book');
+    userID=$(this).attr('data-userID');
+    if (value == stopMessage){
+        $('#readButton').html(startMessage); 
+    }
+    else{
+        $.get('/mylibrary/user_read_book/', {'user': userID, 'bookISBN':bookISBN}, function() {
+            $('#readButton').html(stopMessage);
+            $('#readHeader').hide();
+            alert("Book has been added to your current books");
+        })
+    }
 }); 
 });
 
 $(document).ready(function() { 
-    $('#readButton').click(function() {
-    var bookISBN;
-    bookISBN = $(this).attr('data-bookISBN');
-    userID=$(this).attr(data-userID);
-    
-    $.get('/mylibrary/read_book/', 
-    {'book_ISBN': bookISBN, 'userID':userID}, 
-    function() {
-        $('#readButton').html("Stop Reading")
-    })
-}); 
-});
+    $('#progress').load(function() {
+        var pagesRead = $(this).attr('data-book');
+        var totalPages = $(this).attr('data-userID');
+        var percentage = (pagesRead/totalPages)*100
+        $('progress').width(percentage+'%');
+    })}); 
+
+
