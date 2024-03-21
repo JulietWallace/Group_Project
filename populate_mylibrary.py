@@ -13,10 +13,13 @@ from mylibrary.models import Book, Category, Review, User, Goal, Admin
 counter = 0
 
 def populate():
-    user_dict = [{"categoryID": "Classic", "numOfBooks" : 10}, {"categoryID": "History", "numOfBooks" : 2}]
-    category_dict = [{"categoryID": "Classic", "numOfBooks" : 10}, {"categoryID": "History", "numOfBooks" : 2}]
     
+    user_dict = [{"username":"dylan"}]
+    category_dict = [{"categoryID": "Classic", "numOfBooks" : 10}, {"categoryID": "History", "numOfBooks" : 2}, {"categoryID":"Fantasy","numOfBooks":4},{"categoryID":"Action","numOfBooks":4}]
     
+    for u in user_dict:
+        add_user(u["username"])
+        
     book_dict=[{"title":"Pride and Prejudice", "author": "Jane Austen", "ISBN": 9780140430721, "uploadedBy":User.objects.get(username="dylan"), "categories":{"History"}},
                {"title":"Crime and Punishment", "author": "Fyodor Dostoyevsky", "ISBN": 648103837163, "uploadedBy":User.objects.get(username="dylan"),"categories":{"History"}},
                {"title":"War and Peace", "author": "Leo Tolstoy", "ISBN": 4567891234, "uploadedBy":User.objects.get(username="dylan"),"categories":{"History"}},
@@ -33,9 +36,12 @@ def populate():
         add_book(b["title"], b["ISBN"], b["author"],b["uploadedBy"], b["categories"])
     for b in Fbook_dict:
         add_book(b["title"], b["ISBN"], b["author"],b["uploadedBy"], b["categories"])
+    for u in user_dict:
+        add_user(u["username"])
+
     #add_book("title", 54, "author", User.objects.get(username="dylan"))
-    for book in Book.objects.all():
-        print(book.title)
+        for book in Book.objects.all():
+            print(book.title)
         #for c in category_dict:
             #book.categories.add(Category.objects.get(categoryID = "Action"))
 
@@ -50,9 +56,15 @@ def add_book(title, ISBN, author, uploadedBy, categories):
     return book
 
 def add_category(categoryID, numOfBooks):
+    print(categoryID)
     category =Category.objects.get_or_create(categoryID = categoryID, numOfBooks = numOfBooks)[0]
     category.save()
     return category
+
+def add_user(username):
+    user = User.objects.get_or_create(username=username)[0]
+    user.save()
+    return user
 
 if __name__=='__main__':
     print('Population script running...') 

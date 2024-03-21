@@ -2,10 +2,10 @@
 {% extends 'mylibrary/base.html' %}
 {% load staticfiles %}
 
-<body onload = "createProgressBars()">
+<body>
 {% for book in books %}
 <div class="container mt-3">
-    <h2>Book Name</h2>
+    <h2>{{ book.bookFK.title }}</h2>
     <div class="card">
       <div class="card-body">{{ book.bookFK.title }}</div>
       <div class="progress">

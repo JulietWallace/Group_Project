@@ -8,10 +8,7 @@
 <meta charset="UTF-8" />
 <title>MyLibrary - {% block title_block %}MyLibrary{% endblock %}</title>
 {% load bootstrap5 %}
-<<<<<<< HEAD
-=======
 {% bootstrap_css %}
->>>>>>> juliet7
 {% bootstrap_javascript %}
 
 <link rel="stylesheet" href="{% static 'css/idk.css' %}">
@@ -54,7 +51,6 @@
         </li>
         {% endif %}
         <li class="nav-item">
-<<<<<<< HEAD
             <a class="nav-link link-light" href="{% url 'mylibrary:search' %}">Explore Categories</a>
         </li>
         <form action="{% url 'mylibrary:search' %}">
@@ -64,23 +60,13 @@
     </ul>
     </div>
 </nav>
-=======
-            <a class="nav-link link-light" href="{% url 'mylibrary:explorecategory' %}">Explore Categories</a>
-        </li>
-    </ul>
-    </div>
->>>>>>> juliet7
 
     <div>
     {% block body_block %}
     {% endblock %}
     </div>
     <script src="{% static "js/jquery-3.3.1.min.js" %}" crossorigin="anonymous"></script>
-<<<<<<< HEAD
     <script src="{% static "js/mylibrary-jquery.js" %}" crossorigin="anonymous"></script>
-=======
-    <!--<script src="{% static "js/mylibrary-jquery.js" %}" crossorigin="anonymous"></script>-->
     <script src="{% static "js/mylibrary-ajax.js" %}" crossorigin="anonymous"></script>
->>>>>>> juliet7
     </body> 
 </html>

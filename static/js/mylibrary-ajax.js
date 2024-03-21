@@ -22,9 +22,10 @@ $(document).ready(function() {
 
 $(document).ready(function() { 
     $('#progress').load(function() {
-        var pagesRead = $(this).attr('data-book');
-        var totalPages = $(this).attr('data-userID');
+        var pagesRead = $(this).attr('data-pagesRead');
+        var totalPages = $(this).attr('data-totalPages');
         var percentage = (pagesRead/totalPages)*100
+        console.log(percentage);
         $('progress').width(percentage+'%');
     })}); 
 

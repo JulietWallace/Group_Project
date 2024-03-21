@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from mylibrary.forms import BookForm, UserProfileForm, UserForm, ReviewForm, GoalForm, BooksUserReading
+from mylibrary.forms import BookForm, UserProfileForm, UserForm, ReviewForm, GoalForm
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 from django.http import HttpResponse 
-from mylibrary.models import Book, Category, Review, User, Goal, UserProfile
+from mylibrary.models import Book, Category, Review, User, Goal, UserProfile, BooksUserReading
 
 def index(request):
     category_list = Category.objects.all()
@@ -180,10 +180,12 @@ def show_book(request,book_name_slug):
         context_dict["user"] = UserProfile.objects.get(user=request.user)
         try:
             userReads = BooksUserReading.objects.get(userFK=UserProfile.objects.get(user=request.user), bookFK=book)
-            context_dict['reads'] = True
+            context_dict['read'] = False
             context_dict['relation'] = userReads
+            print(context_dict['read'])
         except BooksUserReading.DoesNotExist:
-            context_dict['reads'] = False
+            context_dict['read'] = True
+            print(context_dict['read'])
     except Book.DoesNotExist:
         context_dict['category']=None
         context_dict['pages']=None
@@ -192,7 +194,7 @@ def show_book(request,book_name_slug):
 
 def curr_books(request):
     context_dict={}
-    context_dict['books'] = BooksUserReading.objects.filter(userFK=request.user)
+    context_dict['books'] = BooksUserReading.objects.filter(userFK=UserProfile.objects.get(user=request.user))
     return render(request, "mylibrary/currentbooks.html", context=context_dict)
 
 def show_category(request, category_name_slug):

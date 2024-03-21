@@ -1,11 +1,3 @@
-
-
-$(document).ready(function() {
-    $('#about-btn').click(function() {
-    alert('You clicked the button using JQuery!');
-    }); 
-});
-
 $("a").click(function() {
     $("p#text").css(
         {fontSize:36, color:"blue"});
@@ -57,8 +49,4 @@ function showAutoSlides() {
   slides[slideIndex-1].style.display = "block";  
   dots[slideIndex-1].className += " active";
   setTimeout(showAutoSlides, 4000); // Change image every 4 seconds, 1000 = 1 sec
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> juliet7
