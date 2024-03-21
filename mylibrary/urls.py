@@ -16,9 +16,13 @@ urlpatterns = [
     path('login/', views.user_login, name='login'),
     path('mygoals/', views.mygoals, name='mygoals'),
     path('myreviews/', views.myreviews, name='myreviews'),
+    path('search_results/', views.search_results, name='search_results'),
+    path('set_goal/', views.set_goal, name='set_goal'),
+    path('add_category/', views.add_category, name='add_category'),
+    path('search/', views.search, name='search'),
     path('explorecategory/', views.explorecategory, name='explorecategory'),
     path('category/<slug:category_name_slug>', views.show_category, name='show_category'),
-    path('set_goal/', views.mygoals, name='set_goal'),
     path('logout/', views.user_logout, name='logout'),
+
 
 ]

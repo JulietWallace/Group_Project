@@ -10,25 +10,22 @@
 MyLibrary
 {% endblock %}
 
-{% if user.is_authenticated %}
-        howdy {{ user.username }}!
-{% else %}
-    hey there partner!
-{% endif %}
-
 {% block body_block %}
 Links:
 {% for categories in categorys %}
         <h1> {{ category }}</h1>
 {%endfor%}
-<h1> welcome {{ user.username }}</h1>
 <li><a href="{% url 'mylibrary:add_book' %}">Add Book</a></li>
-<li><a href="{% url 'mylibrary:about' %}">About</a></li>
-<li><a href="{% url 'mylibrary:explorecategory' %}"> explore Categories</a></li>
 {% if categories %}
+    <div class="container mt-5">
+        <div class="row">
     {% for category in categories %}
-    <li><a href="/mylibrary/category/{{category.slug}}"> {{category.categoryID}}</a></li>
+          <div class="col-sm-2">
+            <h3><a href="/mylibrary/category/{{category.slug}}"> {{category.categoryID}}</a></h3>
+          </div>
     {%endfor%}
+        </div>
+    </div>
 {%endif%}
     <div>
         <ul>

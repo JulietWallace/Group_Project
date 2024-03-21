@@ -161,7 +161,3 @@ form input[type="text"], form textarea {
   from {opacity: 1}
   to {opacity: 1}
 }
-
-.readButton{
-  background-color:"green"
-}

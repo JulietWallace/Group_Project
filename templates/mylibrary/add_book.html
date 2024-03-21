@@ -11,17 +11,17 @@ Add a Book
     {% for hidden in form.hidden_fields %}
     {{ hidden }}
 {% endfor %}
-{% for field in form.visible_fields %}
 <div class="container mt-5">
-    <div class="col">
+  <div class="row">
+{% for field in form.visible_fields %}
       <div class="col-sm-4">
+        {{ field }}
         {{ field.errors }}
         {{ field.help_text }}
-        {{ field }}
       </div>
-    </div>
-  </div>
 {% endfor %}
+</div>
+</div>
 
 <div class="container mt-5">
     <div class="col">

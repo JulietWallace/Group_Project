@@ -4,19 +4,26 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Register
 {% endblock %}
 
 {% block body_block %}
-<h1>Register for mylibrary</h1>
+<h1>Search Results</h1>
 
 {% if books %}
 
 <ul>
+    <div class="container mt-5">
+        <div class="row">
     {% for book in books %}
+    <div class="col-sm-2">
         <li><a href="/mylibrary/book/{{ book.slug }}/">{{ book.title }}</a></li>
+      </div>
      {% endfor %}
 </ul>
+{% else %}
+<div class="alert alert-danger"> <strong> No Book Found! </strong></div>
+<li><a href="/mylibrary/add_book/">add a new book</a></li>
+
 {% endif %}
 
 {% endblock %}

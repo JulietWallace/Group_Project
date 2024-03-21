@@ -4,13 +4,12 @@ from django.db import models
 from django.contrib import admin
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-import datetime
+from datetime import datetime
 
 class Category(models.Model):
     categoryID=models.CharField(max_length=20, unique=True)
     numOfBooks=models.IntegerField(default=0)
     slug=models.SlugField(unique = True)
-    likes=models.IntegerField()
 
     def __str__(self):
         return self.categoryID
@@ -20,7 +19,20 @@ class Category(models.Model):
         super(Category, self).save(*args, **kwargs)
         
     class Meta:
+        ordering = ["categoryID"]
         verbose_name_plural = 'Categories'
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profileLink = models.URLField(blank=True)
+    profilePic=models.ImageField(upload_to='profile_images', blank = True)
+
+    #def save(self, *args, **kwargs):
+        #if not self.slug:
+        #self.slug = slugify(self.name)
+    #super().save(*args, **kwargs)
+    
+        #super(Book,self).save(*args, **kwargs)
 
 
 class Book(models.Model):
@@ -31,7 +43,6 @@ class Book(models.Model):
     categories = models.ManyToManyField(Category)
     title=models.CharField(max_length=500)
     slug=models.SlugField()
-    users_reading=[]
 
     def __str__(self):
         return self.title
@@ -39,43 +50,6 @@ class Book(models.Model):
     def save(self, *args, **kwargs):
         self.slug=slugify(self.title)
         super(Book,self).save(*args, **kwargs)
-    
-    def add_to_reading_list(self, user):
-        self.usersReading.append(user)
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profileLink = models.URLField(blank=True)
-    profilePic=models.ImageField(upload_to='profile_images', blank = True)
-    books_reading=[]
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
-    
-        super(UserProfile,self).save(*args, **kwargs)
-
-    def add_to_books_list(self, book):
-        self.usersReading.append(book)
-
-    def get_books_list(self):
-        return self.books_reading
-    
-
-
-class BooksUserReading(models.Model):
-    userFK = models.OneToOneField(User, on_delete=models.CASCADE)
-    bookFK = models.OneToOneField(Book, on_delete=models.CASCADE)
-    startedReading=models.DateTimeField()
-    pagesRead=models.IntegerField()
-    def __init__(self, userFK, bookFK):
-        self.userFK=userFK
-        self.bookFK=bookFK
-        self.startedReading=datetime.datetime.now()
-        self.pagesRead=0
-    def save(self, *args, **kwargs):
-        super(BooksUserReading,self).save(*args, **kwargs)
 
 
 class Goal(models.Model):
@@ -84,10 +58,12 @@ class Goal(models.Model):
     achieved=models.BooleanField()
     goalID=models.CharField(max_length=50,unique=True)
     numPages=models.IntegerField(null=True)
-    dateDay=models.IntegerField(null=True)
-    dateMonth=models.IntegerField(null=True)
-    dateYear=models.IntegerField(null=True)
+    dateDue = models.DateTimeField(default = datetime.now())
     slug=models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug=slugify(self.goalID)
+        super(Goal,self).save(*args, **kwargs)
 
 
 class Admin(models.Model):

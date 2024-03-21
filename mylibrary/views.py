@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from mylibrary.forms import BookForm, UserProfileForm, UserForm, ReviewForm
+from mylibrary.forms import BookForm, UserProfileForm, UserForm, ReviewForm, GoalForm, CategoryForm
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -7,16 +7,14 @@ from django.utils import timezone
 import django
 from django.urls import reverse
 import datetime
-from django.views import View
 # Create your views here.
 
 from django.http import HttpResponse 
-from mylibrary.models import Book, Category, Review, User, Goal, UserProfile, BooksUserReading
+from mylibrary.models import Book, Category, Review, User, Goal, UserProfile
 
 def index(request):
     category_list = Category.objects.all()
     context_dict = {}
-    print("YOUR MOM") 
     print((category_list))
     context_dict['categories'] = category_list
     return render(request, 'mylibrary/index.html', context={})
@@ -37,6 +35,8 @@ def search_results(request):
 
 def myprofile(request):
     user = User.objects.get(username=request.user.username)
+    context_dict = {}
+    context_dict['user'] = user
     context_dict={"user":user}
     return render(request, 'mylibrary/myprofile.html', context_dict)
 
@@ -67,15 +67,28 @@ def explorecategory(request):
     book_list = Book.objects.all()
     category_list = Category.objects.all()
     context_dict = {}
-    print("YOUR MOM")
-    print((category_list))
     context_dict['categories'] = category_list
+    #context_dict['books'] = book_list
     #context_dict['book'] = book_list
     print(context_dict)
     #context_dict['book'] = book_list
 
     #images = Book.
     return render(request, 'mylibrary/explorecategory.html', context = context_dict)
+
+def add_category(request):
+    form = CategoryForm()
+
+    if request.method =='POST':
+        form = CategoryForm(request.POST)
+
+        if form.is_valid():
+            form.save(commit=True)
+
+            return redirect('/rango/home')
+        else:
+            print(form.errors)
+    return render(request, 'rango/add_category.html', {'form':form})
     
 
 def user_login(request):
@@ -115,7 +128,7 @@ def register(request):
             profile.user = user
 
             if 'profilePic' in request.FILES:
-                profile.picture = request.FILES['profilePic']
+                profile.profilePic = request.FILES['profilePic']
             profile.save()
             registered = True
         else:
@@ -132,21 +145,21 @@ def set_goal(request):
     if request.method == 'POST':
         goal =  BookForm(request.POST)
         if form.is_valid():
-            goal=form.save(commit=False)
-            goal.goalAuthor=request.user
-            goal.dateSet=datetime.datetime.now()
-            goal.save()
-            return redirect(reverse('mylibrary:mygoals'))
+            form=form.save(commit=False)
+            form.goalAuthor=request.user
+            form.dateSet=datetime.datetime.now()
+            form.save()
+
         else:
             print(form.errors)
     
-    return render(request, 'mylibrary/mygoals.html', {'form': form})
+    return render(request, "mylibrary/set_goal.html", {'form': form})
 
 def mygoals(request):
     context_dict={}
     goals = Goal.objects.filter(goalAuthor=request.user)
     context_dict["goals"] = goals
-    return render(request, "mygoals.html", context=context_dict)
+    return render(request, "mylibrary/mygoals.html", context=context_dict)
 
 def myreviews(request):
     context_dict={}
@@ -154,42 +167,26 @@ def myreviews(request):
     context_dict["reviews"] = review
     return render(request, "mylibrary/myreviews.html", context=context_dict)
 
-def book(request,book_name_slug):
-    context_dict={}
-    try:
-        book=Book.objects.get(slug=book_name_slug)
-        review=Review.objects.filter(reviewBookFK=book) #maybe add in an order by feature
-        context_dict={}
-        context_dict["book"]=book
-        context_dict["reviews"]=review
-        #context_dict['readingList']=UserProfile.objects.get(user=request.user).books_reading
-        context_dict["user"] = UserProfile.objects.get(user=request.user)
-    except Book.DoesNotExist:
-        context_dict['category']=None
-        context_dict['pages']=None
-        context_dict['readingList']=None
-    return render(request, "mylibrary/book.html", context=context_dict)
-
-def curr_books(request):
-    context_dict={}
-    context_dict['books']=[]
-    context_dict['books'] = BooksUserReading.objects.filter(userFK=request.user)
-    return render(request, "mylibrary/currentbooks.html", context=context_dict)
-
-
-
 def show_book(request, book_name_slug):
     context_dict={}
     try:
         book=Book.objects.get(slug=book_name_slug)
         review=Review.objects.filter(reviewBookFK=book)
+        categories = book.categories.all()
+        #user=User.objects.filter(reviewAuthorFK= user)
         context_dict={}
         context_dict["book"]=book
         context_dict["reviews"]=review
+        context_dict["categories"]=categories
+        print(categories)
+        #context_dict["users"]=user
     except Book.DoesNotExist:
         context_dict['category']=None
         context_dict['pages']=None
     return render(request, "mylibrary/book.html", context=context_dict)
+
+def current_book(request):
+        return render(request, "mylibrary/book.html", context=context_dict)
 
 def show_category(request, category_name_slug):
 
@@ -198,7 +195,7 @@ def show_category(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
 
-        books = Book.objects.filter(categories=category)
+        books = Book.objects.filter(categories = category)
         print(books)
 
         context_dict['books'] = books
@@ -219,9 +216,11 @@ def add_book(request):
         if form.is_valid():
             book=form.save(commit=False)
             book.uploadedBy=request.user
+            categories = form.cleaned_data['categories']
             if 'photoCover' in request.FILES:
                 book.photoCover = request.FILES['photoCover']
             book.save()
+            book.categories.set(categories)
             show_book(request, book.slug)
             return redirect(reverse('mylibrary:show_book', kwargs={'book_name_slug': book.slug}))
         else:
@@ -236,5 +235,4 @@ def about(request):
 def user_logout(request):
     logout(request)
     return redirect(reverse('mylibrary:index'))
-
 
