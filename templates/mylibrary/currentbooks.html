@@ -2,22 +2,13 @@
 {% extends 'mylibrary/base.html' %}
 {% load staticfiles %}
 
-<body>
+{% block body_block %}
+{% if books %}
 {% for book in books %}
-<div class="container mt-3">
-    <h2>{{ book.bookFK.title }}</h2>
-    <div class="card">
-      <div class="card-body">{{ book.bookFK.title }}</div>
-      <div class="progress">
-      <div class="progress-bar" id="progress-bar"></div>
-      updateProgessBar(book)
-    </div>
-    </div>
-  </div>
-<div class="card">
-    <div class="card-body">Basic card</div>
-  </div>
-{{ book.bookFK.title }}
-{{ book.pagesRead }}
+<a href="/mylibrary/book/{{ book.bookFK.slug }}/">{{ book.bookFK.title }}</a>
 {% endfor %}
-</body>
+{% else %}
+You are not currently reading any books-explore categories to start reading! 
+<a href="{% url 'mylibrary:explorecategory' %}">{{ book.bookFK.title }}</a>
+{% endif %}
+{% endblock %}

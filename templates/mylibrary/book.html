@@ -54,18 +54,14 @@
               </div>
             {% endfor %}
             <li><a href="/mylibrary/book/{{ book.slug }}/write_review">Write review</a></li>
+            <div>
             {% if read %}
+            <button id="readButton" data-totalPages="{{ book.totalPages }}" data-pagesRead="{{ book.pagesRead }}">Stop Reading</button>
+            {% else %}
             <h5 id="readHeader">Click this button to upload this book to your library!</h5>
             <button id="readButton" data-book="{{ book.ISBN }}" data-userID="{{ user.user }}">Start Reading</button>
-            {% else %}
-            <div class="progress"> 
-              <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                70%
-              </div>
-            </div>
-            <button id="readButton" data-totalPages="{{ book.totalPages }}" data-pagesRead="{{ book.pagesRead }}">Stop Reading</button>
-            </div>
             {% endif %}
+            </div>
     </div>
     </body>
 
