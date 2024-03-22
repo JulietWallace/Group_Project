@@ -11,13 +11,14 @@
 <title>MyLibrary - {% block title_block %}MyLibrary{% endblock %}</title>
 {% load bootstrap5 %}
 {% bootstrap_javascript %}
+{% bootstrap_css %}
 
 <link rel="stylesheet" href="{% static 'css/idk.css' %}">
 <body>
 <nav class="navbar navbar-expand-sm bg-info navbar-light">
 <div class="container">
     <ul class="nav">
-        <a class="navbar-brand" href="#"><h1></h1>MyLibrary</h1></a>
+        <a class="navbar-brand" href="{% url 'mylibrary:index' %}"><h1></h1>MyLibrary</h1></a>
         <li class="nav-item">
             <a class="nav-link link-light" href="{% url 'mylibrary:index' %}">HOME</a>
         </li>
@@ -27,13 +28,11 @@
         {% if user.is_authenticated %}
         <a class="nav-link link-light " href = "{% url 'mylibrary:myprofile' %}">
             {% if user.userprofile.profilePic %}
-                <img src="{{MEDIA_URL}}{{ user.userprofile.profilePic }}" style="width:50px;height:50px;">
+            <img src="{{MEDIA_URL}}{{ user.userprofile.profilePic }}" style="width:50px;height:50px;">
             {% else %}
+            <img src="{{MEDIA_URL}}/profile_images/Guest.png" style="width:50px;height:50px;">
             {% endif %}
         </a>
-        <li class="nav-item">
-            <a class="nav-link link-light " href="{% url 'mylibrary:explorecategory' %}">Explore Categories</a>
-        </li>
         <li class="nav-item">
             <a class="nav-link link-light -item" href="{% url 'mylibrary:logout' %}">Logout</a>
         </li>
@@ -44,6 +43,7 @@
             <a class="nav-link link-light" href="{% url 'mylibrary:myprofile' %}">MyProfile</a>
         </li>
         {% else %}
+        <img src="{{MEDIA_URL}}/profile_images/Guest.png" style="width:50px;height:50px;">
         <li class="nav-item">
             <a class="nav-link link-light" href="{% url 'mylibrary:register' %}">Register</a>
         </li>
@@ -52,7 +52,7 @@
         </li>
         {% endif %}
         <li class="nav-item">
-            <a class="nav-link link-light" href="{% url 'mylibrary:search' %}">Explore Categories</a>
+            <a class="nav-link link-light " href="{% url 'mylibrary:explorecategory' %}">Explore Categories</a>
         </li>
         <form action="{% url 'mylibrary:search' %}">
             <input type="text" name="search" placeholder="Search by title" value="{{request.GET.title}}">

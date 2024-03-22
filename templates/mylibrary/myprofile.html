@@ -14,16 +14,11 @@ Hello {{ request.user.username }}
 {% if user.userprofile.profilePic %}
     <img src="{{MEDIA_URL}}{{ user.userprofile.profilePic }}">
 {% else %}
-    <img src="{% static 'img/opo.jpg' %}" style="width:300px;height:300px;">
+    <img src="{% static 'img/Guest.png' %}" style="width:300px;height:300px;">
 {% endif %}
 
 You have been a member since {{ request.user.date_joined }}
-Your current goals are:
-
 </div>
 Links:
-<button class="btn btn-primary" id="about-btn"> Click me - I'm using JQuery!
-</button>
-<li><a href="{% url 'mylibrary:mygoals' %}">MyGoals</a></li>
-<li><a href="{% url 'mylibrary:myreviews' %}">reviews</a></li>
+<li><a href="{% url 'mylibrary:myreviews' %}">MyReviews</a></li>
 {% endblock %}

@@ -15,12 +15,13 @@ from mylibrary.models import Book, Category, Review, User, Goal, UserProfile
 def index(request):
     category_list = Category.objects.all()
     context_dict = {}
-    print((category_list))
-    context_dict['categories'] = category_list
-    return render(request, 'mylibrary/index.html', context={})
+    book_list = Book.objects.order_by('-title')[:3]
+    context_dict['book0'] = book_list[0]
+    context_dict['book1'] = book_list[1]
+    context_dict['book2'] = book_list[2]
+    return render(request, 'mylibrary/index.html', context_dict)
 
 def search(request):
-    #results = Book.objects.filter(name__icontains=query)
     books = Book.objects.filter(title__icontains=request.GET.get('search'))
     context_dict = {}
     context_dict['books'] = books
@@ -28,8 +29,6 @@ def search(request):
     return render(request, 'mylibrary/search_results.html', context_dict)
 
 def search_results(request):
-    #results = Book.objects.filter(name__icontains=query)
-    print(results)
     results = {}
     return render(request, 'mylibrary/search_results.html', {'results': results})    
 
@@ -85,10 +84,10 @@ def add_category(request):
         if form.is_valid():
             form.save(commit=True)
 
-            return redirect('/rango/home')
+            return redirect()
         else:
             print(form.errors)
-    return render(request, 'rango/add_category.html', {'form':form})
+    return render(request, 'mylibrary/add_category.html', {'form':form})
     
 
 def user_login(request):

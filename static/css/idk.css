@@ -34,6 +34,11 @@ body{
   color:  rgb(198, 71, 71);
 }
 
+.responsive-div {
+  width: 50%;
+  height: 30%;
+}
+
 .nav-item {
   color:  rgb(198, 71, 71);
 }
