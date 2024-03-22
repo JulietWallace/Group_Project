@@ -17,22 +17,8 @@ from mylibrary.models import Book, Category, Review, User, Goal, UserProfile
 def index(request):
     category_list = Category.objects.all()
     context_dict = {}
-    book_list = Book.objects.order_by('-title')[:3]
-    context_dict['book0'] = book_list[0]
-    context_dict['book1'] = book_list[1]
-    context_dict['book2'] = book_list[2]
-    return render(request, 'mylibrary/index.html', context_dict)
-
-def search(request):
-    books = Book.objects.filter(title__icontains=request.GET.get('search'))
-    context_dict = {}
-    context_dict['books'] = books
-
-    return render(request, 'mylibrary/search_results.html', context_dict)
-
-def search_results(request):
-    results = {}
-    return render(request, 'mylibrary/search_results.html', {'results': results})    
+    context_dict['categories'] = category_list
+    return render(request, 'mylibrary/index.html', context={})
 
 def search(request):
     #results = Book.objects.filter(name__icontains=query)
@@ -49,31 +35,36 @@ def search_results(request):
     return render(request, 'mylibrary/search_results.html', {'results': results})    
 
 def myprofile(request):
-    user = User.objects.get(username=request.user.username)
-    context_dict = {}
-    context_dict['user'] = user
-    context_dict={"user":user}
-    return render(request, 'mylibrary/myprofile.html', context_dict)
+    if request.user.is_authenticated:
+        user = User.objects.get(username=request.user.username)
+        context_dict = {}
+        context_dict['user'] = user
+        context_dict={"user":user}
+        return render(request, 'mylibrary/myprofile.html', context_dict)
+    else:
+        return redirect('/mylibrary/login/')
 
 def write_review(request, slug):
+    if request.user.is_authenticated:
+        form = ReviewForm()
+        book = Book.objects.filter(slug = slug).first()
 
-    form = ReviewForm()
-    book = Book.objects.filter(slug = slug).first()
-
-    if request.method == 'POST':
-        form =  ReviewForm(request.POST)
-        if form.is_valid():
-            review=form.save(commit=False)
-            review.reviewID = book.slug + str(request.user) + str(review.message)
-            review.reviewAuthorFK=request.user
-            review.reviewBookFK = Book.objects.filter(slug = slug).first()
-            review.save()
-            return redirect('myreviews')
-        else:
-            form = ReviewForm()
-            print(form.errors)
-    
-    return render(request, 'mylibrary/write_review.html', {'form': form, 'book':book})
+        if request.method == 'POST':
+            form =  ReviewForm(request.POST)
+            if form.is_valid():
+                review=form.save(commit=False)
+                review.reviewID = book.slug + str(request.user) + str(review.message)
+                review.reviewAuthorFK=request.user
+                review.reviewBookFK = Book.objects.filter(slug = slug).first()
+                review.save()
+                return redirect('myreviews')
+            else:
+                form = ReviewForm()
+                print(form.errors)
+        
+            return render(request, 'mylibrary/write_review.html', {'form': form, 'book':book})
+    else:
+        return redirect('/mylibrary/login/')
 
 
 def explorecategory(request):
@@ -90,20 +81,6 @@ def explorecategory(request):
 
     #images = Book.
     return render(request, 'mylibrary/explorecategory.html', context = context_dict)
-
-def add_category(request):
-    form = CategoryForm()
-
-    if request.method =='POST':
-        form = CategoryForm(request.POST)
-
-        if form.is_valid():
-            form.save(commit=True)
-
-            return redirect()
-        else:
-            print(form.errors)
-    return render(request, 'mylibrary/add_category.html', {'form':form})
     
 
 def user_login(request):
@@ -153,7 +130,7 @@ def register(request):
         profile_form = UserProfileForm()
     return render(request, "mylibrary/register.html", context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
-
+@login_required
 def set_goal(request):
     form = GoalForm()
 
@@ -170,6 +147,7 @@ def set_goal(request):
     
     return render(request, "mylibrary/set_goal.html", {'form': form})
 
+@login_required
 def mygoals(request):
     context_dict={}
     goals = Goal.objects.filter(goalAuthor=request.user)
@@ -177,35 +155,44 @@ def mygoals(request):
     return render(request, "mylibrary/mygoals.html", context=context_dict)
 
 def myreviews(request):
-    context_dict={}
-    review = Review.objects.filter(reviewAuthorFK=request.user)
-    context_dict["reviews"] = review
-    return render(request, "mylibrary/myreviews.html", context=context_dict)
+    if request.user.is_authenticated:
+        context_dict={}
+        review = Review.objects.filter(reviewAuthorFK=request.user)
+        context_dict["reviews"] = review
+        return render(request, "mylibrary/myreviews.html", context=context_dict)
+    else:
+        return redirect('/mylibrary/login/')
 
 def show_book(request,book_name_slug):
-    context_dict={}
-    try:
-        book=Book.objects.get(slug=book_name_slug)
-        review=Review.objects.filter(reviewBookFK=book)
-        categories = book.categories.all()
-        #user=User.objects.filter(reviewAuthorFK= user)
-        context_dict={}
-        context_dict["book"]=book
-        context_dict["reviews"]=review
-        context_dict["categories"]=categories
-        print(categories)
-        #context_dict["users"]=user
-    except Book.DoesNotExist:
-        context_dict['category']=None
-        context_dict['pages']=None
-    return render(request, "mylibrary/book.html", context=context_dict)
-
-def current_book(request):
+    if request.user.is_authenticated:
+        try:
+            book=Book.objects.get(slug=book_name_slug)
+            review=Review.objects.filter(reviewBookFK=book) #maybe add in an order by feature
+            context_dict={}
+            context_dict["book"]=book
+            context_dict["reviews"]=review
+            context_dict["user"] = UserProfile.objects.get(user=request.user)
+            try:
+                userReads = BooksUserReading.objects.get(userFK=UserProfile.objects.get(user=request.user), bookFK=book)
+                context_dict['read'] = False
+                context_dict['relation'] = userReads
+            except BooksUserReading.DoesNotExist:
+                context_dict['read'] = True
+                print(context_dict['read'])
+        except Book.DoesNotExist:
+            context_dict['category']=None
+            context_dict['pages']=None
+            context_dict['readingList']=None
         return render(request, "mylibrary/book.html", context=context_dict)
+    else:
+        return redirect('/mylibrary/register/')
+
 
 def curr_books(request):
     context_dict={}
     context_dict['books'] = BooksUserReading.objects.filter(userFK=UserProfile.objects.get(user=request.user))
+    for book in context_dict['books']:
+        print(book.bookFK.title)
     return render(request, "mylibrary/currentbooks.html", context=context_dict)
 
 def show_category(request, category_name_slug):
@@ -229,24 +216,27 @@ def show_category(request, category_name_slug):
     return render(request, 'mylibrary/category.html', context=context_dict)
 
 def add_book(request):
-    form = BookForm()
+    if request.user.is_authenticated:
+        form = BookForm()
 
-    if request.method == 'POST':
-        form =  BookForm(request.POST, request.FILES)
-        if form.is_valid():
-            book=form.save(commit=False)
-            book.uploadedBy=request.user
-            categories = form.cleaned_data['categories']
-            if 'photoCover' in request.FILES:
-                book.photoCover = request.FILES['photoCover']
-            book.save()
-            book.categories.set(categories)
-            show_book(request, book.slug)
-            return redirect(reverse('mylibrary:show_book', kwargs={'book_name_slug': book.slug}))
-        else:
-            print(form.errors)
-    
-    return render(request, 'mylibrary/add_book.html', {'form': form})
+        if request.method == 'POST':
+            form =  BookForm(request.POST, request.FILES)
+            if form.is_valid():
+                book=form.save(commit=False)
+                book.uploadedBy=request.user
+                categories = form.cleaned_data['categories']
+                if 'photoCover' in request.FILES:
+                    book.photoCover = request.FILES['photoCover']
+                book.save()
+                book.categories.set(categories)
+                show_book(request, book.slug)
+                return redirect(reverse('mylibrary:show_book', kwargs={'book_name_slug': book.slug}))
+            else:
+                print(form.errors)
+        
+        return render(request, 'mylibrary/add_book.html', {'form': form})
+    else:
+        return redirect('/mylibrary/login/')
 
 def about(request):
     return render(request, 'mylibrary/about.html', context={})
