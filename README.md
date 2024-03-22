@@ -2,7 +2,7 @@
 
 Bootstrap progress bar code in book.html is from https://www.w3schools.com/bootstrap/bootstrap_progressbars.asp
 
-We used the following links to do things with Bootsrap:
+We took code from the following places to do things with bootstrap and create the slide show with javascript:
 
 https://www.w3schools.com/bootstrap5/
 
