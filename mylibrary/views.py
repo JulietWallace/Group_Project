@@ -12,13 +12,15 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 from django.http import HttpResponse 
-from mylibrary.models import Book, Category, Review, User, Goal, UserProfile
+from mylibrary.models import Book, Category, Review, User, Goal, UserProfile, BooksUserReading
 
 def index(request):
-    category_list = Category.objects.all()
     context_dict = {}
-    context_dict['categories'] = category_list
-    return render(request, 'mylibrary/index.html', context={})
+    book_list = Book.objects.order_by('-title').all()
+    context_dict['book0'] = book_list[0]
+    context_dict['book1'] = book_list[1]
+    context_dict['book2'] = book_list[2]
+    return render(request, 'mylibrary/index.html', context=context_dict)
 
 def search(request):
     #results = Book.objects.filter(name__icontains=query)
@@ -45,26 +47,24 @@ def myprofile(request):
         return redirect('/mylibrary/login/')
 
 def write_review(request, slug):
-    if request.user.is_authenticated:
-        form = ReviewForm()
-        book = Book.objects.filter(slug = slug).first()
-
-        if request.method == 'POST':
-            form =  ReviewForm(request.POST)
-            if form.is_valid():
-                review=form.save(commit=False)
-                review.reviewID = book.slug + str(request.user) + str(review.message)
-                review.reviewAuthorFK=request.user
-                review.reviewBookFK = Book.objects.filter(slug = slug).first()
-                review.save()
-                return redirect('myreviews')
-            else:
-                form = ReviewForm()
-                print(form.errors)
-        
-            return render(request, 'mylibrary/write_review.html', {'form': form, 'book':book})
-    else:
-        return redirect('/mylibrary/login/')
+ 
+    form = ReviewForm()
+    book = Book.objects.filter(slug = slug).first()
+ 
+    if request.method == 'POST':
+        form =  ReviewForm(request.POST)
+        if form.is_valid():
+            review=form.save(commit=False)
+            review.reviewID = book.slug + str(request.user) + str(review.message)
+            review.reviewAuthorFK=request.user
+            review.reviewBookFK = Book.objects.filter(slug = slug).first()
+            review.save()
+            return redirect('myreviews')
+        else:
+            form = ReviewForm()
+            print(form.errors)
+   
+    return render(request, 'mylibrary/write_review.html', {'form': form, 'book':book})
 
 
 def explorecategory(request):
@@ -168,10 +168,12 @@ def show_book(request,book_name_slug):
         try:
             book=Book.objects.get(slug=book_name_slug)
             review=Review.objects.filter(reviewBookFK=book) #maybe add in an order by feature
+            categories = book.categories.all()
             context_dict={}
             context_dict["book"]=book
             context_dict["reviews"]=review
             context_dict["user"] = UserProfile.objects.get(user=request.user)
+            context_dict["categories"] = categories
             try:
                 userReads = BooksUserReading.objects.get(userFK=UserProfile.objects.get(user=request.user), bookFK=book)
                 context_dict['read'] = False
@@ -260,4 +262,6 @@ class user_read_book(View):
 def user_logout(request):
     logout(request)
     return redirect(reverse('mylibrary:index'))
+
+
 

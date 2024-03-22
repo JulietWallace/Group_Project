@@ -31,6 +31,3 @@ class Test(TestCase):
         with self.assertRaises(IntegrityError):
             Book.objects.create(ISBN = 2, author = "a", title = "a")
 
-
-
-# Create your tests here.

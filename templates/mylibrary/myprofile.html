@@ -11,7 +11,7 @@
 <div>
 Hello {{ request.user.username }}
 {% if user.userprofile.profilePic %}
-    <img src="{{MEDIA_URL}}{{ user.userprofile.profilePic }}">
+    <img src="{{MEDIA_URL}}{{ user.userprofile.profilePic }}" style="width:300px;height:300px">
 {% else %}
     <img src="{% static 'img/Guest.png' %}" style="width:300px;height:300px;">
 {% endif %}

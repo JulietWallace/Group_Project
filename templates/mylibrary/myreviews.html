@@ -5,7 +5,6 @@
 {% load staticfiles %}
 
 {% block title_block %}
-These are your goals:
 {% endblock %}
 {% if reviews %}
 {% for review in reviews %}
@@ -14,13 +13,16 @@ These are your goals:
 {% endif %}
 
 {% block body_block %}
-Links:
-<li><a href="{% url 'mylibrary:add_book' %}">Add Book</a></li>
 {% if reviews %}
 {% for review in reviews %}
 <div class="container mt-5">
     <div class="col">
       <div class="col-sm-4">
+        {% if review.reviewAuthorFK.userprofile.profilePic %}
+                    <img src="{{MEDIA_URL}}{{ review.reviewAuthorFK.userprofile.profilePic }}" style="width:50px;height:50px;">
+                    {% else %}
+                    <img src="{{MEDIA_URL}}/profile_images/Guest.png" style="width:50px;height:50px;">
+                    {% endif %}
         <h3>{{ review.reviewBookFK }}</h3>
         <p>{{ review.message }}</p>
       </div>
