@@ -41,6 +41,7 @@ class Book(models.Model):
     uploadedBy=models.ForeignKey(User, on_delete = models.CASCADE, null = True)
     coverPhoto=models.ImageField(upload_to='book_images')
     categories = models.ManyToManyField(Category)
+    views=models.IntegerField(default = 0)
     title=models.CharField(max_length=500)
     slug=models.SlugField()
     totalPages=models.IntegerField(null=True)
@@ -75,6 +76,7 @@ class BooksUserReading(models.Model):
 
     #def save(self, *args, **kwargs):
         #super(BooksUserReading,self).save(*args, **kwargs)
+
 
 
 class Goal(models.Model):

@@ -7,24 +7,6 @@
 About MyLibrary
 {% endblock %}
 {% block body_block %}
-<li><a href="{% url 'mylibrary:explorecategory' %}">Category</a></li>
-<div><strong>{{ "This web page has been put together by Juliet Wallace" }}</strong><br /> </div>
-<button class="btn btn-primary"
-onclick="alert('You clicked the button using inline JavaScript.');">
-Click me - I run on vanilla JavaScript! </button>
-<button class="btn btn-primary" id="about-btn"> Click me - I'm using JQuery!
-
-    <div class="progress">
-        <div id="myProgressBar" class="progress-bar " 
-            role="progressbar" 
-            style="width: 25%";
-            aria-valuemin="0" 
-            aria-valuenow = "25"
-            aria-valuemax="100"  
-            >10%
-        </div>
-    </div>
-    <button id = "Updatebutton">Update Progress</button>
-    <input type = "number" id = "inputd" placeholder = "work">
-</button>
+<div><strong>This website has been put together by Juliet Wallace, Edwin Barnes and Dylan Stair.</strong><br /> </div>
+<div><strong>The scope of this web app is to allow users to have their own library, with functionalities such as writing and reading reviews, adding and exploring books.</strong><br /> </div>
 {% endblock %}

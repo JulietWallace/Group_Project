@@ -1,5 +1,6 @@
 body{
     background-color: rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
     font-family:'Times New Roman', Times, serif;
 }
 
@@ -80,6 +81,7 @@ form input[type="text"], form textarea {
 /* Slideshow container */
 .slideshow-container {
   max-width: 500px;
+  max-width: 500px;
   position: relative;
   margin: auto;
 }
@@ -93,9 +95,11 @@ form input[type="text"], form textarea {
   cursor: pointer;
   position: absolute;
   top: 60%;
+  top: 60%;
   width: auto;
   margin-top: -22px;
   padding: 16px;
+  color: black;
   color: black;
   font-weight: bold;
   font-size: 18px;
@@ -155,9 +159,11 @@ form input[type="text"], form textarea {
 .fade {
   animation-name: fade;
   animation-duration: 3000s;
+  animation-duration: 3000s;
 }
 
 @keyframes fade {
+  from {opacity: 1}
   from {opacity: 1}
   to {opacity: 1}
 }

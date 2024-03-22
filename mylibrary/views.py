@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from mylibrary.forms import BookForm, UserProfileForm, UserForm, ReviewForm, GoalForm
+from mylibrary.forms import BookForm, UserProfileForm, UserForm, ReviewForm, GoalForm, CategoryForm
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -12,14 +12,27 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 from django.http import HttpResponse 
-from mylibrary.models import Book, Category, Review, User, Goal, UserProfile, BooksUserReading
+from mylibrary.models import Book, Category, Review, User, Goal, UserProfile
 
 def index(request):
     category_list = Category.objects.all()
     context_dict = {}
-    print((category_list))
-    context_dict['categories'] = category_list
-    return render(request, 'mylibrary/index.html', context={})
+    book_list = Book.objects.order_by('-title')[:3]
+    context_dict['book0'] = book_list[0]
+    context_dict['book1'] = book_list[1]
+    context_dict['book2'] = book_list[2]
+    return render(request, 'mylibrary/index.html', context_dict)
+
+def search(request):
+    books = Book.objects.filter(title__icontains=request.GET.get('search'))
+    context_dict = {}
+    context_dict['books'] = books
+
+    return render(request, 'mylibrary/search_results.html', context_dict)
+
+def search_results(request):
+    results = {}
+    return render(request, 'mylibrary/search_results.html', {'results': results})    
 
 def search(request):
     #results = Book.objects.filter(name__icontains=query)
@@ -87,10 +100,10 @@ def add_category(request):
         if form.is_valid():
             form.save(commit=True)
 
-            return redirect('/rango/home')
+            return redirect()
         else:
             print(form.errors)
-    return render(request, 'rango/add_category.html', {'form':form})
+    return render(request, 'mylibrary/add_category.html', {'form':form})
     
 
 def user_login(request):
@@ -173,24 +186,22 @@ def show_book(request,book_name_slug):
     context_dict={}
     try:
         book=Book.objects.get(slug=book_name_slug)
-        review=Review.objects.filter(reviewBookFK=book) #maybe add in an order by feature
+        review=Review.objects.filter(reviewBookFK=book)
+        categories = book.categories.all()
+        #user=User.objects.filter(reviewAuthorFK= user)
         context_dict={}
         context_dict["book"]=book
         context_dict["reviews"]=review
-        context_dict["user"] = UserProfile.objects.get(user=request.user)
-        try:
-            userReads = BooksUserReading.objects.get(userFK=UserProfile.objects.get(user=request.user), bookFK=book)
-            context_dict['read'] = False
-            context_dict['relation'] = userReads
-            print(context_dict['read'])
-        except BooksUserReading.DoesNotExist:
-            context_dict['read'] = True
-            print(context_dict['read'])
+        context_dict["categories"]=categories
+        print(categories)
+        #context_dict["users"]=user
     except Book.DoesNotExist:
         context_dict['category']=None
         context_dict['pages']=None
-        context_dict['readingList']=None
     return render(request, "mylibrary/book.html", context=context_dict)
+
+def current_book(request):
+        return render(request, "mylibrary/book.html", context=context_dict)
 
 def curr_books(request):
     context_dict={}
